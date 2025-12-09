@@ -1,77 +1,39 @@
-#include <SDL3/SDL.h>
+#include "game.hpp"
 
-#define EXIT_SUCCESS 0
-
-enum TriagleVerticesNames : unsigned __int64
-{
-	A = 0,
-	B = 1,
-	C = 2
-};
-
-//First test program to demostrate rendering of a basic triangle
+//First game test - character animation ; left and right movement
 //'WinMain' has to be used as entry point
 int WinMain(int argc, char** argv)
 {
-	//Initialize variables 
+	//Initialize library
+	SDL_Init(SDL_INIT_VIDEO);
+
+	//Initialize main variables
 	SDL_Window* GameWindow = nullptr;
-	constexpr __int32 Width = 600, Length = 500;
-	SDL_Renderer* TriangleRenderer = nullptr;
-	SDL_Event Event = SDL_Event();
+	constexpr int32_t Width = 1280, Length = 720; //16:9 HD 720p
+	RCluster GameRenderers = RCluster();
+	constexpr uint64_t CountOfGameRenderers = 1;
+	constexpr uint64_t PlayerTextureScalingCoeficient = 4; //Scales default 32x32 textures to 128x128 textures
 	
-	//Initialize triangle's vertices
-	constexpr __int64 TriangleVerticesCount = 3;
-	SDL_Vertex TriangleVertices[TriangleVerticesCount] =
+	//Initialize texture clusters
+	std::array<TCluster, 4> PlayerAnimationTClusters =
 	{
-		SDL_Vertex(SDL_FPoint(100.0f, 400.0f), SDL_FColor(255, 255, 255, SDL_ALPHA_OPAQUE), SDL_FPoint()), //Vertex A
-		SDL_Vertex(SDL_FPoint(500.0f, 400.0f), SDL_FColor(255, 255, 255, SDL_ALPHA_OPAQUE), SDL_FPoint()), //Vertex B
-		SDL_Vertex(SDL_FPoint(300.0f, 100.0f), SDL_FColor(255, 255, 255, SDL_ALPHA_OPAQUE), SDL_FPoint())  //Vertex C
+		TCluster(),
+		TCluster(),
+		TCluster(),
+		TCluster()
 	};
 
-	//Initialize library, graphical window and one renderer
-	SDL_Init(SDL_INIT_VIDEO);
-	GameWindow = SDL_CreateWindow("Basic Triangle", Width, Length, NULL);
-	TriangleRenderer = SDL_CreateRenderer(GameWindow, NULL);
+	//Prepare window and renderer for game loop
+	GameLoop::PrepareGameWindowsAndRenderers(GameWindow, GameRenderers, Width, Length, CountOfGameRenderers);
+	//Prepare textures
+	TextureOperators::PrepareAllPlayerAnimationTextures(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerAnimationTClusters, PlayerTextureScalingCoeficient);
+	//Game starts
+	GameLoop::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoeficient, PlayerAnimationTClusters);
+	//Destroy game loop window and renderer before closing program
+	GameLoop::DestroyGameWindowAndRenderers(GameWindow, GameRenderers);
 
-	//Main loop for poll events
-	while (true)
-	{
-		//Get event poll and process it
-		SDL_PollEvent(&Event);
-
-		//Flip triangle if a 'K' key is pressed and flip it back if its released
-		if (Event.key.scancode == SDL_SCANCODE_K)
-		{
-			if (Event.type == SDL_EVENT_KEY_DOWN)
-			{
-				TriangleVertices[A].position.y = 100.0f;
-				TriangleVertices[B].position.y = 100.0f;
-				TriangleVertices[C].position.y = 400.0f;
-			}
-
-			if (Event.type == SDL_EVENT_KEY_UP)
-			{
-				TriangleVertices[A].position.y = 400.0f;
-				TriangleVertices[B].position.y = 400.0f;
-				TriangleVertices[C].position.y = 100.0f;
-			}
-		}
-
-		//Check if the window has to be closed
-		if (Event.type == SDL_EVENT_QUIT)
-			break;
-
-		//Rendering the triangle using three vertices
-		SDL_SetRenderDrawColor(TriangleRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-		SDL_RenderClear(TriangleRenderer);
-		SDL_SetRenderDrawColor(TriangleRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
-		SDL_RenderGeometry(TriangleRenderer, NULL, TriangleVertices, TriangleVerticesCount, NULL, NULL);
-		SDL_RenderPresent(TriangleRenderer);
-	}
-
-	//Clear memory and close program
-	SDL_DestroyRenderer(TriangleRenderer);
-	SDL_DestroyWindow(GameWindow);
+	//Quit the library and close program
+	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	SDL_Quit();
 
 	return EXIT_SUCCESS;

@@ -1,0 +1,124 @@
+#ifndef GAME
+#define GAME
+
+//standard C++ lib
+#include <iostream>
+#include <string>
+#include <vector>
+#include <array>
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <fstream>
+#include <filesystem>
+
+//SDL3 lib + SDL3_image lib
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+
+//Allowing functions to be inlined only if the build is 'Release'
+#if _DEBUG == 1
+#define INLINE
+#elif NDEBUG == 1
+#define INLINE inline
+#endif
+
+//Default values for player's textures on screen - will be changed to more dynamic
+#define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
+#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 100.0f
+
+//Names for the indexes for all game renderers defined in 'RCluster' in 'WinMain' function
+enum GameRenderersNames : uint64_t
+{
+	TEXTURE_RENDERER = 0
+};
+
+//Names for the indexes of 'PlayerAnimationTClusters' array defined in 'WinMain' function
+enum PlayerAnimationTClustersIndexes : uint64_t
+{
+	RUNNING_FACING_LEFT = 0,
+	RUNNING_FACING_RIGHT = 1,
+	STANDING_FACING_LEFT = 2,
+	STANDING_FACING_RIGHT = 3
+};
+
+//Add pointer safety!
+//Dynamic cluster that should contain textures that are related to each other
+typedef struct ClusterOfSimiliarTextures
+{
+	std::vector<SDL_Texture*> _Textures;
+}
+TCluster;
+
+//Add pointer safety!
+//Dynamic cluster that should contain renderers that are related to each other
+typedef struct ClusterOfSimiliarRenderers
+{
+	std::vector<SDL_Renderer*> _Renderers;
+}
+RCluster;
+
+//All possible direction that entity can face
+enum Directions : uint64_t
+{
+	LEFT = 0,
+	RIGHT = 1,
+	UP = 2,
+	DOWN = 3
+};
+
+//Container defining a state of an entity
+typedef struct EntityCurrentStatus
+{
+	Directions _Facing;
+	bool _IsRunning;
+	SDL_FRect PositionAndSize;
+}
+Entity;
+
+namespace GameLoop //[start]
+{
+//Initialize graphical window and one renderer that renders player movement animation
+void PrepareGameWindowsAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers, const int32_t _WindowWidth, const int32_t _WindowLength, const uint64_t _CountOfRenderers);
+//Destroys graphical window and one renderer
+void DestroyGameWindowAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers);
+//Function that takes an user event and transforms it into a player status data and animation
+void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Entity& _Player, TCluster*& _TextureToAnimate, std::array<TCluster, 4>& _PlayerAnimationTClusters, std::mutex& _MutexForMainThread);
+//Loop for processing user events and rendering the game - runs on 'Main thread'
+void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoeficient, std::array<TCluster, 4>& _PlayerAnimationTClusters);
+}
+//GameLoop [end]
+
+namespace CharacterAnimation //[start]
+{
+//Sets the color that will be used that the begining of every frame to black - should be called only once at the begining of program
+void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer);
+//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoeficient'
+Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoeficient = 1);
+//Thread that animates a set cluster of textures by continously selecting them in order [first->last] with delay
+void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish);
+//Thread that constantly updates the screen with an animation of player's character
+void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, const Entity& _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish);
+}
+//CharacterAnimation [end]
+
+namespace TextureOperators //[start]
+{
+//Extracts PNG into surface then [optionaly] scales it by a coeficient and then converts it to a renderable texture
+SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoeficient = 1);
+//Function that safely removes from selected cluster
+void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
+//Fills the four TClusters with textures from .png files
+void PrepareAllPlayerAnimationTextures(SDL_Renderer* const _TextureRenderer, std::array<TCluster, 4>& _PlayerAnimationTClusters, const uint64_t _ScalingCoeficient);
+}
+//TextureOperators [end]
+
+namespace ErrorHandle //[start]
+{
+
+//Add game-wide Error handle!
+
+}
+//ErrorHandle [end]
+
+#endif //GAME
