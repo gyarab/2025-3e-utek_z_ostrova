@@ -3,10 +3,10 @@
 namespace GameLoop //[start]
 {
 
-//Initialize graphical window and one renderer that renders player movement animation
+//Initialize graphical window and a specified amount of renderers
 void PrepareGameWindowsAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers, const int32_t _WindowWidth, const int32_t _WindowLength, const uint64_t _CountOfRenderers)
 {
-	_GameWindow = SDL_CreateWindow("Character Animation", _WindowWidth, _WindowLength, NULL);
+	_GameWindow = SDL_CreateWindow("Escape from the Island -> Character Animation", _WindowWidth, _WindowLength, NULL);
 	
 	for (uint64_t c = NULL; c < _CountOfRenderers; c++)
 		_GameRenderers._Renderers.emplace_back(SDL_CreateRenderer(_GameWindow, NULL));
@@ -14,7 +14,7 @@ void PrepareGameWindowsAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRen
 	return;
 };
 
-//Destroys graphical window and one renderer
+//Destroys graphical window and renderers
 void DestroyGameWindowAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers)
 {
 	for (uint64_t c = NULL; c < _GameRenderers._Renderers.size(); c++)
@@ -31,11 +31,10 @@ void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Enti
 	switch (_UserEvent.type)
 	{
 	case SDL_EVENT_KEY_DOWN:
-		_Player._IsRunning = true;
-
 		switch (_UserEvent.key.scancode)
 		{
 		case SDL_SCANCODE_A:
+			_Player._IsRunning = true;
 			_Player._Facing = LEFT;
 			_MutexForMainThread.lock();
 			_TextureToAnimate = &_PlayerAnimationTClusters[RUNNING_FACING_LEFT];
@@ -44,6 +43,7 @@ void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Enti
 			break;
 
 		case SDL_SCANCODE_D:
+			_Player._IsRunning = true;
 			_Player._Facing = RIGHT;
 			_MutexForMainThread.lock();
 			_TextureToAnimate = &_PlayerAnimationTClusters[RUNNING_FACING_RIGHT];
@@ -105,7 +105,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 	//Texture that should be rendered on screen - thread unsafe
 	SDL_Texture* TextureToRender = nullptr;
 	//Cluster of textures that should be animated - thread unsafe
-	TCluster* TexturesToAnimate = &_PlayerAnimationTClusters[STANDING_FACING_LEFT]; //Setting a default textures to animate so something will always on the screen
+	TCluster* TexturesToAnimate = &_PlayerAnimationTClusters[STANDING_FACING_LEFT]; //Setting a default textures to animate so something will always be on the screen
 	//Variable that tells the 'AnimatePlayerTextureClusterThread' and 'FrameRenderThread' when to stop
 	std::atomic_bool ThreadShouldFinish = false;
 	//Variable that tells the 'AnimatePlayerTextureClusterThread' to stop animating for a while when the animation textures has to be changed
@@ -115,7 +115,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 	CharacterAnimation::SetFrameDefaultColorToBlack(_TextureRenderer);
 	//The 'AnimatePlayerTextureClusterThread' and 'FrameRenderThread' starts
 	std::thread AnimatePlayerTextureClusterThread(&CharacterAnimation::AnimatePlayerTextureClusterThreadMain, &TextureToRender, &TexturesToAnimate, 300, &AnimationInterrupted, &ThreadShouldFinish);
-	std::thread FrameRenderThread(&CharacterAnimation::FrameRenderThreadMain, _TextureRenderer, Player, &TextureToRender, &ThreadShouldFinish);
+	std::thread FrameRenderThread(&CharacterAnimation::FrameRenderThreadMain, _TextureRenderer, &Player, &TextureToRender, &ThreadShouldFinish);
 	
 	while (true)
 	{

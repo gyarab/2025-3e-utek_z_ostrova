@@ -3,7 +3,7 @@
 namespace CharacterAnimation //[start]
 {
 
-//Sets the color that will be used that the begining of every frame to black - should be called only once at the begining of program
+//Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
 void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer)
 {
 	SDL_SetRenderDrawColor(_TextureRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
@@ -22,7 +22,7 @@ void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TClu
 {
 	//Mutex to safely operate with critical sector from 'AnimatePlayerTextureClusterThread'
 	std::mutex MutexForAnimatePlayerTextureClusterThread;
-	//
+	//Dynamic thread waiting method using mutex-lock with condition variable - waiting can be interrupted even before it ends
 	std::mutex WaitingMutex;
 	std::unique_lock<std::mutex> WaitingLock(WaitingMutex);
 	std::condition_variable WaitingCondition;
@@ -49,8 +49,8 @@ void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TClu
 	return;
 };
 
-//Thread that constantly updates the screen with an animation of player's character
-void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, const Entity& _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish)
+//Thread that constantly updates the screen with an animation of player's character + it can also change the player's coords
+void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//main thread loop
 	while (!*_ThreadShouldFinish)
@@ -58,8 +58,33 @@ void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, const Entity& _
 		if (*_TextureToRender == nullptr)
 			continue;
 
+		//Transform into separate inline function!
+		//Changing player's coords based on its current status
+		if (_Player->_IsRunning)
+			switch (_Player->_Facing)
+			{
+			case LEFT:
+				if (_Player->_PositionAndSize.x <= 0.0f)
+					_Player->_PositionAndSize.x = 1280.0f - 128.0f;
+
+				_Player->_PositionAndSize.x -= 0.2f;
+
+				break;
+
+			case RIGHT:
+				if (_Player->_PositionAndSize.x >= 1280.0f - 128.0f)
+					_Player->_PositionAndSize.x = 0.0f;
+
+				_Player->_PositionAndSize.x += 0.2f;
+
+				break;
+
+			default:
+				break;
+			}
+
 		SDL_RenderClear(_TextureRenderer);
-		SDL_RenderTexture(_TextureRenderer, *_TextureToRender, NULL, &_Player.PositionAndSize);
+		SDL_RenderTexture(_TextureRenderer, *_TextureToRender, NULL, &_Player->_PositionAndSize);
 		SDL_RenderPresent(_TextureRenderer);
 		//This ensures that only at maximum ~1000 frames will be rendered in a second [max. ~1000FPS] <- More is not needed
 		std::this_thread::sleep_for((std::chrono::milliseconds)1);

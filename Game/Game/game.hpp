@@ -1,7 +1,11 @@
 #ifndef GAME
 #define GAME
 
-//standard C++ lib
+//Accelerate rendering on GPU!
+//Add versions to the .exe + an icon!
+//Change the .exe name to 'escape_from_the_island.exe'!
+
+//standard C++ lib - some yet unused
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,7 +27,8 @@
 #define INLINE inline
 #endif
 
-//Default values for player's textures on screen - will be changed to more dynamic
+//Make it more dynamic!
+//Default values for player's textures on screen
 #define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
 #define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 100.0f
 
@@ -72,15 +77,15 @@ typedef struct EntityCurrentStatus
 {
 	Directions _Facing;
 	bool _IsRunning;
-	SDL_FRect PositionAndSize;
+	SDL_FRect _PositionAndSize;
 }
 Entity;
 
 namespace GameLoop //[start]
 {
-//Initialize graphical window and one renderer that renders player movement animation
+//Initialize graphical window and a specified amount of renderers
 void PrepareGameWindowsAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers, const int32_t _WindowWidth, const int32_t _WindowLength, const uint64_t _CountOfRenderers);
-//Destroys graphical window and one renderer
+//Destroys graphical window and renderers
 void DestroyGameWindowAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers);
 //Function that takes an user event and transforms it into a player status data and animation
 void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Entity& _Player, TCluster*& _TextureToAnimate, std::array<TCluster, 4>& _PlayerAnimationTClusters, std::mutex& _MutexForMainThread);
@@ -91,14 +96,14 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 
 namespace CharacterAnimation //[start]
 {
-//Sets the color that will be used that the begining of every frame to black - should be called only once at the begining of program
+//Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
 void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer);
 //Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoeficient'
 Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoeficient = 1);
 //Thread that animates a set cluster of textures by continously selecting them in order [first->last] with delay
 void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish);
-//Thread that constantly updates the screen with an animation of player's character
-void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, const Entity& _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish);
+//Thread that constantly updates the screen with an animation of player's character + it can also change the player's coords
+void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish);
 }
 //CharacterAnimation [end]
 

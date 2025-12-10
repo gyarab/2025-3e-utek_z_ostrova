@@ -1,6 +1,11 @@
 [
   {
     "Name": "Nový profil",
-    "Projects": []
+    "Projects": [
+      {
+        "Path": "Game\\Game.vcxproj",
+        "Action": "Start"
+      }
+    ]
   }
 ]
