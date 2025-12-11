@@ -126,7 +126,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 		if (CurrentUserEvent.type == SDL_EVENT_QUIT)
 			break;
 
-		//User pressed key A or D or released them - or didnt do anything new
+		//User pressed key A or D or released them - or didn't do anything new
 		//Run this function only if the current event is different than the previous
 		if (CurrentUserEvent.type != PreviousUserEvent.type || CurrentUserEvent.key.scancode != PreviousUserEvent.key.scancode)
 		{

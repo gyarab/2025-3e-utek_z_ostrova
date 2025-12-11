@@ -3,12 +3,12 @@
 namespace TextureOperators //[start]
 {
 
-//Extracts PNG into surface then [optionaly] scales it by a coeficient and then converts it to a renderable texture
-SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoeficient)
+//Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
+SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoefficient)
 {
 	SDL_IOStream* PNG_File = SDL_IOFromFile(_Filename.c_str(), "r");
 	SDL_Surface* ExtractedData = IMG_LoadPNG_IO(PNG_File);
-	SDL_Surface* ScaledExtractedData = SDL_ScaleSurface(ExtractedData, (int32_t)_ScalingCoeficient * ExtractedData->w, (int32_t)_ScalingCoeficient * ExtractedData->h, SDL_SCALEMODE_NEAREST);
+	SDL_Surface* ScaledExtractedData = SDL_ScaleSurface(ExtractedData, (int32_t)_ScalingCoefficient * ExtractedData->w, (int32_t)_ScalingCoefficient * ExtractedData->h, SDL_SCALEMODE_NEAREST);
 	SDL_Texture* FinishedTexture = SDL_CreateTextureFromSurface(_TextureRenderer, ScaledExtractedData);
 
 	SDL_CloseIO(PNG_File);

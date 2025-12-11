@@ -49,7 +49,7 @@ enum PlayerAnimationTClustersIndexes : uint64_t
 
 //Add pointer safety!
 //Dynamic cluster that should contain textures that are related to each other
-typedef struct ClusterOfSimiliarTextures
+typedef struct ClusterOfSimilarTextures
 {
 	std::vector<SDL_Texture*> _Textures;
 }
@@ -57,7 +57,7 @@ TCluster;
 
 //Add pointer safety!
 //Dynamic cluster that should contain renderers that are related to each other
-typedef struct ClusterOfSimiliarRenderers
+typedef struct ClusterOfSimilarRenderers
 {
 	std::vector<SDL_Renderer*> _Renderers;
 }
@@ -98,9 +98,9 @@ namespace CharacterAnimation //[start]
 {
 //Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
 void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer);
-//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoeficient'
-Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoeficient = 1);
-//Thread that animates a set cluster of textures by continously selecting them in order [first->last] with delay
+//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
+Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoefficient = 1);
+//Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
 void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish);
 //Thread that constantly updates the screen with an animation of player's character + it can also change the player's coords
 void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish);
@@ -109,8 +109,8 @@ void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _
 
 namespace TextureOperators //[start]
 {
-//Extracts PNG into surface then [optionaly] scales it by a coeficient and then converts it to a renderable texture
-SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoeficient = 1);
+//Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
+SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoefficient = 1);
 //Function that safely removes from selected cluster
 void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
 //Fills the four TClusters with textures from .png files

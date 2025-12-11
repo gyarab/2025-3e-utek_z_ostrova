@@ -11,13 +11,13 @@ void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer)
 	return;
 };
 
-//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoeficient'
-Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoeficient)
+//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
+Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoefficient)
 {
-	return Entity(LEFT, false, SDL_FRect(ENTITY_PLAYER_DEFAULT_SCREEN_POSITION, ENTITY_PLAYER_DEFAULT_SCREEN_POSITION, _ScalingCoeficient * ENTITY_PLAYER_DEFAULT_SIZE, _ScalingCoeficient * ENTITY_PLAYER_DEFAULT_SIZE));
+	return Entity(LEFT, false, SDL_FRect(ENTITY_PLAYER_DEFAULT_SCREEN_POSITION, ENTITY_PLAYER_DEFAULT_SCREEN_POSITION, _ScalingCoefficient * ENTITY_PLAYER_DEFAULT_SIZE, _ScalingCoefficient * ENTITY_PLAYER_DEFAULT_SIZE));
 };
 
-//Thread that animates a set cluster of textures by continously selecting them in order [first->last] with delay
+//Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
 void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//Mutex to safely operate with critical sector from 'AnimatePlayerTextureClusterThread'
