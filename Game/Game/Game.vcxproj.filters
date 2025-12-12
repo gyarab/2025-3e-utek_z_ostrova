@@ -35,7 +35,7 @@
     <ClInclude Include="escape_from_the_island.hpp">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="resource.hpp">
       <Filter>Soubory zdrojů</Filter>
     </ClInclude>
   </ItemGroup>

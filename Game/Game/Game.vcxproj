@@ -156,7 +156,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="escape_from_the_island.hpp" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="resource.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="escape_from_the_island.rc" />
