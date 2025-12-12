@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "escape_from_the_island.hpp"
 
 namespace GameLoop //[start]
 {

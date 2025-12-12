@@ -1,9 +1,10 @@
-#ifndef GAME
-#define GAME
+#ifndef ESCAPE_FROM_THE_ISLAND
+#define ESCAPE_FROM_THE_ISLAND
+
+//current game version: 1.0.0.0
 
 //Accelerate rendering on GPU!
-//Add versions to the .exe + an icon!
-//Change the .exe name to 'escape_from_the_island.exe'!
+//Add better app/game icon!
 
 //standard C++ lib - some yet unused
 #include <iostream>
@@ -126,4 +127,4 @@ namespace ErrorHandle //[start]
 }
 //ErrorHandle [end]
 
-#endif //GAME
+#endif //ESCAPE_FROM_THE_ISLAND

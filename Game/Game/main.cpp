@@ -1,4 +1,4 @@
-#include "game.hpp"
+#include "escape_from_the_island.hpp"
 
 //First game test - character animation ; left and right movement
 //'WinMain' has to be used as entry point

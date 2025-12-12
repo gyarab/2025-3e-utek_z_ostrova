@@ -24,6 +24,7 @@
     <ProjectGuid>{f1a9343e-03b1-47a5-94d6-9200c55824b0}</ProjectGuid>
     <RootNamespace>Game</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+    <ProjectName>escape_from_the_island</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -154,7 +155,14 @@
     <ClCompile Include="texture_operators.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="game.hpp" />
+    <ClInclude Include="escape_from_the_island.hpp" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="escape_from_the_island.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
