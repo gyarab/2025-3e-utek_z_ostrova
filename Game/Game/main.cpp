@@ -6,7 +6,7 @@ int WinMain(int argc, char** argv)
 {
 	//Initialize library
 	SDL_Init(SDL_INIT_VIDEO);
-
+	
 	//Initialize main variables
 	SDL_Window* GameWindow = nullptr;
 	constexpr int32_t Width = 1280, Length = 720; //16:9 HD 720p
@@ -29,7 +29,7 @@ int WinMain(int argc, char** argv)
 	TextureOperators::PrepareAllPlayerAnimationTextures(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerAnimationTClusters, PlayerTextureScalingCoefficient);
 	//Game starts
 	GameLoop::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoefficient, PlayerAnimationTClusters);
-	//Destroy game loop window and renderer before closing program
+	//Destroy game window and renderer before closing program
 	GameLoop::DestroyGameWindowAndRenderers(GameWindow, GameRenderers);
 
 	//Quit the library and close program

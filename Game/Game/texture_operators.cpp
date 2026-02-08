@@ -18,7 +18,7 @@ SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, cons
 	return FinishedTexture;
 };
 
-//Function that safely removes from selected cluster
+//Function that safely removes texture from selected cluster
 void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index)
 {
 	SDL_DestroyTexture(_TextureCluster._Textures[_Index]);
