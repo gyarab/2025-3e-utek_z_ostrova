@@ -30,6 +30,12 @@
     <ClCompile Include="error_handle.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="runtime_log.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
+    <ClCompile Include="config_file.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="escape_from_the_island.hpp">
@@ -48,5 +54,8 @@
     <Image Include="icon1.ico">
       <Filter>Soubory zdrojů</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.ini" />
   </ItemGroup>
 </Project>

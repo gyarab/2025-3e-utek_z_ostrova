@@ -151,7 +151,9 @@
     <ClCompile Include="character_animation.cpp" />
     <ClCompile Include="error_handle.cpp" />
     <ClCompile Include="game_loop.cpp" />
+    <ClCompile Include="config_file.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="runtime_log.cpp" />
     <ClCompile Include="texture_operators.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -163,6 +165,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

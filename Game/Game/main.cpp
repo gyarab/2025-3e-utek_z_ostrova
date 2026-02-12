@@ -4,9 +4,20 @@
 //'WinMain' has to be used as entry point
 int WinMain(int argc, char** argv)
 {
-	//Initialize library
-	SDL_Init(SDL_INIT_VIDEO);
+	//Creating log file
+	RuntimeLog::CreateFile();
 	
+	//Initialize library - program gets terminated if this fails
+	if (!SDL_Init(SDL_INIT_VIDEO))
+	{
+		//move to error handle!
+		RuntimeLog::Message(ERROR, SDL_GetError());
+		RuntimeLog::Message(CRASH, "previous error was too fatal and process needed to be terminated");
+		exit(-1);
+	}
+	
+	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere!
+
 	//Initialize main variables
 	SDL_Window* GameWindow = nullptr;
 	constexpr int32_t Width = 1280, Length = 720; //16:9 HD 720p
@@ -35,6 +46,9 @@ int WinMain(int argc, char** argv)
 	//Quit the library and close program
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	SDL_Quit();
+
+	RuntimeLog::Message(INFO, "SDL-lib successfully terminated");
+	RuntimeLog::Message(INFO, "Program successfully terminated");
 
 	return EXIT_SUCCESS;
 };

@@ -16,6 +16,7 @@
 #include <mutex>
 #include <fstream>
 #include <filesystem>
+#include <sstream>
 
 //SDL3 lib + SDL3_image lib
 #include <SDL3/SDL.h>
@@ -32,6 +33,15 @@
 //Default values for player's textures on screen
 #define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
 #define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 100.0f
+
+//All types of messages that can be logged
+enum LogTypes : uint64_t
+{
+	INFO = 0,
+	WARNING = 1,
+	ERROR = 2,
+	CRASH = 3
+};
 
 //Names for the indexes for all game renderers defined in 'RCluster' in 'WinMain' function
 enum GameRenderersNames : uint64_t
@@ -126,5 +136,31 @@ namespace ErrorHandle //[start]
 
 }
 //ErrorHandle [end]
+
+namespace ConfigFile //[start]
+{
+//Finds the value based on specific Bundle and Selector and extracts it as Number type
+void ReadValue(const std::string& _Bundle, const std::string& _Selector, uint64_t& _ExtractedValue);
+//Finds the value based on specific Bundle and Selector and extracts it as Bool type
+void ReadValue(const std::string& _Bundle, const std::string& _Selector, bool& _ExtractedValue);
+//Finds the value based on specific Bundle and Selector and extracts it as Text type
+void ReadValue(const std::string& _Bundle, const std::string& _Selector, std::string& _ExtractedValue);
+//Finds the old value based on specific Bundle and Selector and changes it to the new Number type value
+void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const uint64_t& _NewValue);
+//Finds the old value based on specific Bundle and Selector and changes it to the new Bool type value
+void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const bool& _NewValue);
+//Finds the old value based on specific Bundle and Selector and changes it to the new Text type value
+void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const std::string& _NewValue);
+}
+//ConfigFile [end]
+
+namespace RuntimeLog //[start]
+{
+//Creates a new file for log messages - needs to be called first
+void CreateFile(void);
+//Appends a new message to already existing log file
+void Message(const LogTypes _Type, const std::string& _Message);
+}
+//RuntimeLog [end]
 
 #endif //ESCAPE_FROM_THE_ISLAND
