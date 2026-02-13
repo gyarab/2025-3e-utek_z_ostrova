@@ -12,11 +12,11 @@ int WinMain(int argc, char** argv)
 	{
 		//move to error handle!
 		RuntimeLog::Message(ERROR, SDL_GetError());
-		RuntimeLog::Message(CRASH, "previous error was too fatal and process needed to be terminated");
+		RuntimeLog::Message(CRASH, "previous error was too fatal => process needed to be terminated");
 		exit(-1);
 	}
 	
-	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere!
+	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere
 
 	//Initialize main variables
 	SDL_Window* GameWindow = nullptr;

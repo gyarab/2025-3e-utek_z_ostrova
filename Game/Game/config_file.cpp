@@ -1,7 +1,7 @@
 #include "escape_from_the_island.hpp"
 
 //Name of the file containing all the neccessary config info
-#define INI_FILE_NAME "config.ini"
+#define INI_FILE_NAME "config.ini"s
 
 //All posible data type that a selector can hold
 enum SelectorDataType : uint64_t
@@ -15,13 +15,13 @@ enum SelectorDataType : uint64_t
 static void ExtractFileIntoLines(std::vector<std::string>& _FileLines)
 {
 	std::string OneLine;
-	std::fstream FileHandle((std::string)SDL_GetBasePath() + INI_FILE_NAME, std::ios::in);
+	std::fstream FileHandle(SDL_GetBasePath() + INI_FILE_NAME, std::ios::in);
 
 	if (FileHandle.fail())
 	{
 		//ErrorHandle...
-		RuntimeLog::Message(ERROR, "Could not find/open config file \"config.ini\"");
-		RuntimeLog::Message(CRASH, "previous error was too fatal and process needed to be terminated");
+		RuntimeLog::Message(ERROR, "could not find/open config file \"config.ini\"");
+		RuntimeLog::Message(CRASH, "previous error was too fatal => process needed to be terminated");
 		exit(-1);
 	}
 
@@ -41,13 +41,13 @@ static void ExtractFileIntoLines(std::vector<std::string>& _FileLines)
 //Truncates all current content it the file and replaces it with the new lines from the array
 static void OverwriteFileWithNewContent(std::vector<std::string>& _NewFileLines)
 {
-	std::fstream FileHandle((std::string)SDL_GetBasePath() + INI_FILE_NAME, std::ios::out | std::ios::trunc);
+	std::fstream FileHandle(SDL_GetBasePath() + INI_FILE_NAME, std::ios::out | std::ios::trunc);
 
 	if (FileHandle.fail())
 	{
 		//ErrorHandle...
-		RuntimeLog::Message(ERROR, "Could not find/open config file \"config.ini\"");
-		RuntimeLog::Message(CRASH, "previous error was too fatal and process needed to be terminated");
+		RuntimeLog::Message(ERROR, "could not find/open config file \"config.ini\"");
+		RuntimeLog::Message(CRASH, "previous error was too fatal => process needed to be terminated");
 		exit(-1);
 	}
 
@@ -63,10 +63,8 @@ static void OverwriteFileWithNewContent(std::vector<std::string>& _NewFileLines)
 static uint64_t FindLineWithBundle(const std::vector<std::string>& _FileLines, const std::string& _Bundle)
 {
 	for (uint64_t c = NULL; c < _FileLines.size(); c++)
-	{
 		if (_FileLines[c] == "[" + _Bundle + "]")
 			return c;
-	}
 
 	//ErrorHandle...
 
@@ -148,7 +146,7 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, uint64_
 		return;
 
 	_ExtractedValue = //Interpret as number
-		std::stoull(FileLines[SelectorPosition].substr(EqualSignPosition + 1, FileLines[SelectorPosition].length() - EqualSignPosition - 1));
+		std::stoull(FileLines[SelectorPosition].substr(EqualSignPosition + 1));
 
 	return;
 };
@@ -168,7 +166,7 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, bool& _
 		return;
 
 	_ExtractedValue = //Interpret as bool
-		(FileLines[SelectorPosition].substr(EqualSignPosition + 1, FileLines[SelectorPosition].length() - EqualSignPosition - 1) == "true");
+		(FileLines[SelectorPosition].substr(EqualSignPosition + 1) == "true");
 
 	return;
 };
@@ -188,7 +186,7 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, std::st
 		return;
 
 	_ExtractedValue = //Interpret as text
-		FileLines[SelectorPosition].substr(EqualSignPosition + 2, FileLines[SelectorPosition].length() - EqualSignPosition - 3);
+		FileLines[SelectorPosition].substr(EqualSignPosition + 1);
 
 	return;
 };
@@ -250,7 +248,7 @@ void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const
 		return;
 
 	//Overwrite with new text
-	FileLines[SelectorPosition] = FileLines[SelectorPosition].substr(0, EqualSignPosition + 1) + "\"" + _NewValue + "\"";
+	FileLines[SelectorPosition] = FileLines[SelectorPosition].substr(0, EqualSignPosition + 1) + _NewValue;
 	OverwriteFileWithNewContent(FileLines);
 
 	return;

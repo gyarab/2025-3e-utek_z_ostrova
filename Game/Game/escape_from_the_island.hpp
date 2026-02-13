@@ -29,6 +29,10 @@
 #define INLINE inline
 #endif
 
+//Allowing usage of std literal operators for strings and time
+using namespace std::string_literals;
+using namespace std::chrono_literals;
+
 //Make it more dynamic!
 //Default values for player's textures on screen
 #define ENTITY_PLAYER_DEFAULT_SIZE 32.0f

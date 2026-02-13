@@ -52,11 +52,11 @@ namespace RuntimeLog //[start]
 void CreateFile(void)
 {
 	//Creates a new directory for the logs - if it already exists, nothing will happen
-	std::filesystem::create_directory((std::string)SDL_GetBasePath() + "logs");
+	std::filesystem::create_directory(SDL_GetBasePath() + "logs"s);
 
 	LogFileAssets Assets;
-	Assets.filename = (std::string)SDL_GetBasePath() + "logs\\" + CurrentTimeStamp() + "-runtime.log";
-	std::string FirstMessage = CurrentDateTimeString() + " [INFO] log created \n";
+	Assets.filename = SDL_GetBasePath() + "logs\\"s + CurrentTimeStamp() + "-runtime.log";
+	std::string FirstMessage = CurrentDateTimeString() + " [INFO] log created PID = " + std::to_string(_getpid()) + "\n";
 
 	std::fstream LogFile(Assets.filename, std::ios::out | std::ios::trunc);
 	LogFile.write(FirstMessage.c_str(), FirstMessage.size());
