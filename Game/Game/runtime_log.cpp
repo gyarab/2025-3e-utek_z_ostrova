@@ -45,12 +45,57 @@ static INLINE std::string LogTypeToString(const LogTypes _Type)
 		"";
 };
 
+//Checks if given file is an acutall .log file by its suffix
+static INLINE bool IsLogFile(const std::filesystem::directory_entry& _File)
+{
+	std::string Filename = _File.path().filename().string();
+
+	return Filename.substr(Filename.rfind('.')) == ".log";
+};
+
+//Deletes from the oldest available log until theres 9 logs left
+static void DeleteOldestLogs(uint64_t _CountOfLogFiles)
+{
+	for (const std::filesystem::directory_entry& File : std::filesystem::directory_iterator(SDL_GetBasePath() + "logs"s))
+	{
+		if (IsLogFile(File))
+		{
+			std::filesystem::remove(File);
+			_CountOfLogFiles--;
+		}
+
+		if (_CountOfLogFiles < 10)
+			break;
+	}
+
+	return;
+};
+
+//Checks if theres 10 or more logs, if so itll delete the oldest ones
+static void DeleteTooManyLogs(void)
+{
+	uint64_t CountOfLogFiles = NULL;
+
+	for (const std::filesystem::directory_entry& File : std::filesystem::directory_iterator(SDL_GetBasePath() + "logs"s))
+		if (IsLogFile(File))
+			CountOfLogFiles++;
+
+	if (CountOfLogFiles >= 10)
+		DeleteOldestLogs(CountOfLogFiles);
+
+	return;
+};
+
 namespace RuntimeLog //[start]
 {
 
 //Creates a new file for log messages - needs to be called first
 void CreateFile(void)
 {
+	//If log directory exists test if theres too many logs and delete them
+	if (std::filesystem::exists(SDL_GetBasePath() + "logs"s))
+		DeleteTooManyLogs();
+
 	//Creates a new directory for the logs - if it already exists, nothing will happen
 	std::filesystem::create_directory(SDL_GetBasePath() + "logs"s);
 
