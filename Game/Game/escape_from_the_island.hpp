@@ -104,11 +104,11 @@ namespace WindowRenderHandle //[start]
 //Initialize a specified amount of renderers for a specified window
 void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
 //Initialize graphical window and a specified amount of renderers
-INLINE void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
+void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
 //Destroys specified renderers
 void DestroyRenderers(SDL_Window*& _Window, RCluster& _Renderers);
 //Destroys graphical window and renderers
-INLINE void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers);
+void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers);
 //Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
 void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 }

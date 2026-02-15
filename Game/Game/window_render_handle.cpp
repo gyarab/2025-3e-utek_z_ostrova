@@ -42,7 +42,7 @@ void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64
 };
 
 //Initialize graphical window and a specified amount of renderers
-INLINE void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers)
+void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers)
 {
 	std::string WindowTitle;
 	int64_t WindowWidth = NULL, WindowLength = NULL;
@@ -90,7 +90,7 @@ void DestroyRenderers(SDL_Window*& _Window, RCluster& _Renderers)
 };
 
 //Destroys graphical window and renderers
-INLINE void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers)
+void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers)
 {
 	WindowRenderHandle::DestroyRenderers(_Window, _Renderers);
 	SDL_DestroyWindow(_Window);
