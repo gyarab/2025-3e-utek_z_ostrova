@@ -18,12 +18,7 @@ static void ExtractFileIntoLines(std::vector<std::string>& _FileLines)
 	std::fstream FileHandle(SDL_GetBasePath() + INI_FILE_NAME, std::ios::in);
 
 	if (FileHandle.fail())
-	{
-		//ErrorHandle...
-		RuntimeLog::Message(ERROR, "could not find/open config file \"config.ini\"");
-		RuntimeLog::Message(CRASH, "previous error was too fatal => process needed to be terminated");
-		exit(-1);
-	}
+		ErrorHandle::Report("could not find/open config file \"config.ini\"", -1, true);
 
 	_FileLines.clear();
 
@@ -44,12 +39,7 @@ static void OverwriteFileWithNewContent(std::vector<std::string>& _NewFileLines)
 	std::fstream FileHandle(SDL_GetBasePath() + INI_FILE_NAME, std::ios::out | std::ios::trunc);
 
 	if (FileHandle.fail())
-	{
-		//ErrorHandle...
-		RuntimeLog::Message(ERROR, "could not find/open config file \"config.ini\"");
-		RuntimeLog::Message(CRASH, "previous error was too fatal => process needed to be terminated");
-		exit(-1);
-	}
+		ErrorHandle::Report("could not find/open config file {\"config.ini\"}", -1, true);
 
 	for (std::string OneLine : _NewFileLines)
 		FileHandle.write((OneLine + "\n").c_str(), OneLine.length() + 1);
@@ -66,7 +56,7 @@ static uint64_t FindLineWithBundle(const std::vector<std::string>& _FileLines, c
 		if (_FileLines[c] == "[" + _Bundle + "]")
 			return c;
 
-	//ErrorHandle...
+	ErrorHandle::Report("could not find the bundle {" + _Bundle + "} in the given config file", -1, true);
 
 	return NULL;
 };
@@ -95,14 +85,13 @@ static uint64_t FindLineWithSelector(const std::vector<std::string>& _FileLines,
 	for (uint64_t c = _BundleSectorStart + 1; c < _FileLines.size(); c++)
 	{
 		if (IsBundle(_FileLines[c]))
-			//ErrorHandle...
-			return NULL;
+			break;
 
 		if (IsSpecificSelectorWithValue(_FileLines[c], _Selector))
 			return c;
 	}
 
-	//ErrorHandle...
+	ErrorHandle::Report("could not find the selector {" + _Selector + "} in the given bundle range in the config file", -1, true);
 
 	return NULL;
 };
@@ -120,8 +109,7 @@ static INLINE void ExtractBasicInfo(const std::string& _Bundle, const std::strin
 //Returns a numberic value based on selector's first char value
 static INLINE SelectorDataType TellSelectorDataType(const std::string& _SpecificSelector)
 {
-	//ErrorHandle...
-
+	//Anything else than char 'b' and 't' is considerer as number
 	return
 		_SpecificSelector[0] == 'b'	? BOOL :
 		_SpecificSelector[0] == 't'	? TEXT :
@@ -132,7 +120,7 @@ namespace ConfigFile //[start]
 {
 
 //Finds the value based on specific Bundle and Selector and extracts it as Number type
-void ReadValue(const std::string& _Bundle, const std::string& _Selector, uint64_t& _ExtractedValue)
+void ReadValue(const std::string& _Bundle, const std::string& _Selector, int64_t& _ExtractedValue)
 {
 	std::vector<std::string> FileLines;
 	uint64_t SelectorPosition = NULL;
@@ -142,11 +130,10 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, uint64_
 	ExtractBasicInfo(_Bundle, _Selector, FileLines, SelectorPosition, EqualSignPosition);
 
 	if (TellSelectorDataType(FileLines[SelectorPosition]) != NUMBER)
-		//ErrorHandle...
-		return;
+		ErrorHandle::Report("Type mismatch in value at bundle {" + _Bundle + "}, selector {" + _Selector + "}", -1, true);
 
 	_ExtractedValue = //Interpret as number
-		std::stoull(FileLines[SelectorPosition].substr(EqualSignPosition + 1));
+		std::stoll(FileLines[SelectorPosition].substr(EqualSignPosition + 1));
 
 	return;
 };
@@ -162,8 +149,7 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, bool& _
 	ExtractBasicInfo(_Bundle, _Selector, FileLines, SelectorPosition, EqualSignPosition);
 
 	if (TellSelectorDataType(FileLines[SelectorPosition]) != BOOL)
-		//ErrorHandle...
-		return;
+		ErrorHandle::Report("Type mismatch in value at bundle {" + _Bundle + "}, selector {" + _Selector + "}", -1, true);
 
 	_ExtractedValue = //Interpret as bool
 		(FileLines[SelectorPosition].substr(EqualSignPosition + 1) == "true");
@@ -182,8 +168,7 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, std::st
 	ExtractBasicInfo(_Bundle, _Selector, FileLines, SelectorPosition, EqualSignPosition);
 
 	if (TellSelectorDataType(FileLines[SelectorPosition]) != TEXT)
-		//ErrorHandle...
-		return;
+		ErrorHandle::Report("Type mismatch in value at bundle {" + _Bundle + "}, selector {" + _Selector + "}", -1, true);
 
 	_ExtractedValue = //Interpret as text
 		FileLines[SelectorPosition].substr(EqualSignPosition + 1);
@@ -192,7 +177,7 @@ void ReadValue(const std::string& _Bundle, const std::string& _Selector, std::st
 };
 
 //Finds the old value based on specific Bundle and Selector and changes it to the new Number type value
-void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const uint64_t& _NewValue)
+void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const int64_t& _NewValue)
 {
 	std::vector<std::string> FileLines;
 	uint64_t SelectorPosition = NULL;
@@ -202,8 +187,7 @@ void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const
 	ExtractBasicInfo(_Bundle, _Selector, FileLines, SelectorPosition, EqualSignPosition);
 
 	if (TellSelectorDataType(FileLines[SelectorPosition]) != NUMBER)
-		//ErrorHandle...
-		return;
+		ErrorHandle::Report("Type mismatch in value at bundle {" + _Bundle + "}, selector {" + _Selector + "}", -1, true);
 
 	//Overwrite with new number
 	FileLines[SelectorPosition] = FileLines[SelectorPosition].substr(0, EqualSignPosition + 1) + std::to_string(_NewValue);
@@ -223,8 +207,7 @@ void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const
 	ExtractBasicInfo(_Bundle, _Selector, FileLines, SelectorPosition, EqualSignPosition);
 
 	if (TellSelectorDataType(FileLines[SelectorPosition]) != BOOL)
-		//ErrorHandle...
-		return;
+		ErrorHandle::Report("Type mismatch in value at bundle {" + _Bundle + "}, selector {" + _Selector + "}", -1, true);
 
 	//Overwrite with new bool
 	FileLines[SelectorPosition] = FileLines[SelectorPosition].substr(0, EqualSignPosition + 1) + (_NewValue ? "true" : "false");
@@ -244,8 +227,7 @@ void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const
 	ExtractBasicInfo(_Bundle, _Selector, FileLines, SelectorPosition, EqualSignPosition);
 
 	if (TellSelectorDataType(FileLines[SelectorPosition]) != TEXT)
-		//ErrorHandle...
-		return;
+		ErrorHandle::Report("Type mismatch in value at bundle {" + _Bundle + "}, selector {" + _Selector + "}", -1, true);
 
 	//Overwrite with new text
 	FileLines[SelectorPosition] = FileLines[SelectorPosition].substr(0, EqualSignPosition + 1) + _NewValue;
