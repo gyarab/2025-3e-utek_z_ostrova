@@ -22,6 +22,9 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
+//
+#include "config_file_content_info.hpp"
+
 //Allowing functions to be inlined only if the build is 'Release'
 #if _DEBUG == 1
 #define INLINE
@@ -96,23 +99,32 @@ typedef struct EntityCurrentStatus
 }
 Entity;
 
-namespace GameLoop //[start]
+namespace WindowRenderHandle //[start]
 {
+//Initialize a specified amount of renderers for a specified window
+void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
 //Initialize graphical window and a specified amount of renderers
-void PrepareGameWindowsAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers, const int32_t _WindowWidth, const int32_t _WindowLength, const uint64_t _CountOfRenderers);
+INLINE void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
+//Destroys specified renderers
+void DestroyRenderers(SDL_Window*& _Window, RCluster& _Renderers);
 //Destroys graphical window and renderers
-void DestroyGameWindowAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers);
+INLINE void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers);
+//Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
+void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
+}
+//WindowRenderHandle [end]
+
+namespace GameLoopThread //[start]
+{
 //Function that takes an user event and transforms it into a player status data and animation
 void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Entity& _Player, TCluster*& _TextureToAnimate, std::array<TCluster, 4>& _PlayerAnimationTClusters, std::mutex& _MutexForMainThread);
 //Loop for processing user events and rendering the game - runs on 'Main thread'
 void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoeficient, std::array<TCluster, 4>& _PlayerAnimationTClusters);
 }
-//GameLoop [end]
+//GameLoopThread [end]
 
-namespace CharacterAnimation //[start]
+namespace PlayerThread //[start]
 {
-//Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
-void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer);
 //Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
 Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoefficient = 1);
 //Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
@@ -120,9 +132,9 @@ void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TClu
 //Thread that constantly updates the screen with an animation of player's character + it can also change the player's coords
 void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish);
 }
-//CharacterAnimation [end]
+//PlayerThread [end]
 
-namespace TextureOperators //[start]
+namespace TextureHandle //[start]
 {
 //Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
 SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoefficient = 1);
@@ -131,26 +143,27 @@ void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _I
 //Fills the four TClusters with textures from .png files
 void PrepareAllPlayerAnimationTextures(SDL_Renderer* const _TextureRenderer, std::array<TCluster, 4>& _PlayerAnimationTClusters, const uint64_t _ScalingCoeficient);
 }
-//TextureOperators [end]
+//TextureHandle [end]
 
 namespace ErrorHandle //[start]
 {
-
-//Add game-wide Error handle!
-
+//Place an error related to specified code and terminate process eventually
+void Report(const std::string& _ErrorMessage, const uint64_t _ErrorCode, const bool _TerminateProcess);
+//Place an error related to SDL-lib and terminate process eventually
+void ReportSDL(const bool _TerminateProcess);
 }
 //ErrorHandle [end]
 
 namespace ConfigFile //[start]
 {
 //Finds the value based on specific Bundle and Selector and extracts it as Number type
-void ReadValue(const std::string& _Bundle, const std::string& _Selector, uint64_t& _ExtractedValue);
+void ReadValue(const std::string& _Bundle, const std::string& _Selector, int64_t& _ExtractedValue);
 //Finds the value based on specific Bundle and Selector and extracts it as Bool type
 void ReadValue(const std::string& _Bundle, const std::string& _Selector, bool& _ExtractedValue);
 //Finds the value based on specific Bundle and Selector and extracts it as Text type
 void ReadValue(const std::string& _Bundle, const std::string& _Selector, std::string& _ExtractedValue);
 //Finds the old value based on specific Bundle and Selector and changes it to the new Number type value
-void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const uint64_t& _NewValue);
+void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const int64_t& _NewValue);
 //Finds the old value based on specific Bundle and Selector and changes it to the new Bool type value
 void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const bool& _NewValue);
 //Finds the old value based on specific Bundle and Selector and changes it to the new Text type value

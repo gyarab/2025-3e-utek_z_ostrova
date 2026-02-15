@@ -148,17 +148,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="character_animation.cpp" />
+    <ClCompile Include="player_thread.cpp" />
     <ClCompile Include="error_handle.cpp" />
-    <ClCompile Include="game_loop.cpp" />
+    <ClCompile Include="game_loop_thread.cpp" />
     <ClCompile Include="config_file.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="runtime_log.cpp" />
-    <ClCompile Include="texture_operators.cpp" />
+    <ClCompile Include="texture_handle.cpp" />
+    <ClCompile Include="window_render_handle.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="config_file_content_info.hpp" />
+    <ClInclude Include="error_messages_codes.hpp" />
     <ClInclude Include="escape_from_the_island.hpp" />
+    <ClInclude Include="RCluster.hpp" />
     <ClInclude Include="resource.hpp" />
+    <ClInclude Include="TCluster.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="escape_from_the_island.rc" />

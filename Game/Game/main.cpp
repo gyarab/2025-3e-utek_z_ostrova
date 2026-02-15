@@ -6,15 +6,10 @@ int WinMain(int argc, char** argv)
 {
 	//Creating log file
 	RuntimeLog::CreateFile();
-	
+
 	//Initialize library - program gets terminated if this fails
 	if (!SDL_Init(SDL_INIT_VIDEO))
-	{
-		//move to error handle!
-		RuntimeLog::Message(ERROR, SDL_GetError());
-		RuntimeLog::Message(CRASH, "previous error was too fatal => process needed to be terminated");
-		exit(-1);
-	}
+		ErrorHandle::ReportSDL(true);
 	
 	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere
 
@@ -35,13 +30,13 @@ int WinMain(int argc, char** argv)
 	};
 
 	//Prepare window and renderer for game loop
-	GameLoop::PrepareGameWindowsAndRenderers(GameWindow, GameRenderers, Width, Length, CountOfGameRenderers);
+	WindowRenderHandle::CreateNewWindowWithRenderers(GameWindow, GameRenderers, CountOfGameRenderers);
 	//Prepare textures
-	TextureOperators::PrepareAllPlayerAnimationTextures(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerAnimationTClusters, PlayerTextureScalingCoefficient);
+	TextureHandle::PrepareAllPlayerAnimationTextures(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerAnimationTClusters, PlayerTextureScalingCoefficient);
 	//Game starts
-	GameLoop::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoefficient, PlayerAnimationTClusters);
+	GameLoopThread::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoefficient, PlayerAnimationTClusters);
 	//Destroy game window and renderer before closing program
-	GameLoop::DestroyGameWindowAndRenderers(GameWindow, GameRenderers);
+	WindowRenderHandle::DestroyWindowWithRenderers(GameWindow, GameRenderers);
 
 	//Quit the library and close program
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);

@@ -15,16 +15,16 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="character_animation.cpp">
+    <ClCompile Include="player_thread.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
-    <ClCompile Include="texture_operators.cpp">
+    <ClCompile Include="texture_handle.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
-    <ClCompile Include="game_loop.cpp">
+    <ClCompile Include="game_loop_thread.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
     <ClCompile Include="error_handle.cpp">
@@ -36,6 +36,9 @@
     <ClCompile Include="config_file.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="window_render_handle.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="escape_from_the_island.hpp">
@@ -43,6 +46,18 @@
     </ClInclude>
     <ClInclude Include="resource.hpp">
       <Filter>Soubory zdrojů</Filter>
+    </ClInclude>
+    <ClInclude Include="config_file_content_info.hpp">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="error_messages_codes.hpp">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="TCluster.hpp">
+      <Filter>Hlavičkové soubory</Filter>
+    </ClInclude>
+    <ClInclude Include="RCluster.hpp">
+      <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

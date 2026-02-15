@@ -1,6 +1,6 @@
 #include "escape_from_the_island.hpp"
 
-namespace TextureOperators //[start]
+namespace TextureHandle //[start]
 {
 
 //Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
@@ -56,17 +56,17 @@ void PrepareAllPlayerAnimationTextures(SDL_Renderer* const _TextureRenderer, std
 	PNG_FilePaths PNGs = PNG_FilePaths();
 
 	for (uint64_t c = 0; c <= 3; c++)
-		_PlayerAnimationTClusters[RUNNING_FACING_LEFT]._Textures.emplace_back(TextureOperators::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
+		_PlayerAnimationTClusters[RUNNING_FACING_LEFT]._Textures.emplace_back(TextureHandle::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
 
 	for (uint64_t c = 4; c <= 7; c++)
-		_PlayerAnimationTClusters[RUNNING_FACING_RIGHT]._Textures.emplace_back(TextureOperators::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
+		_PlayerAnimationTClusters[RUNNING_FACING_RIGHT]._Textures.emplace_back(TextureHandle::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
 
 	for (uint64_t c = 8; c <= 9; c++)
-		_PlayerAnimationTClusters[STANDING_FACING_LEFT]._Textures.emplace_back(TextureOperators::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
-
+		_PlayerAnimationTClusters[STANDING_FACING_LEFT]._Textures.emplace_back(TextureHandle::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
+	
 	for (uint64_t c = 10; c <= 11; c++)
-		_PlayerAnimationTClusters[STANDING_FACING_RIGHT]._Textures.emplace_back(TextureOperators::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
+		_PlayerAnimationTClusters[STANDING_FACING_RIGHT]._Textures.emplace_back(TextureHandle::MakeScaledTextureFromPNG(_TextureRenderer, PNGs._AppPath + PNGs._FilePaths[c], _ScalingCoeficient));
 };
 
 }
-//TextureOperators [end]
+//TextureHandle [end]

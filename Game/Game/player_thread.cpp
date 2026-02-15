@@ -1,15 +1,7 @@
 #include "escape_from_the_island.hpp"
 
-namespace CharacterAnimation //[start]
+namespace PlayerThread //[start]
 {
-
-//Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
-void SetFrameDefaultColorToBlack(SDL_Renderer* const _TextureRenderer)
-{
-	SDL_SetRenderDrawColor(_TextureRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-
-	return;
-};
 
 //Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
 Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoefficient)
@@ -94,4 +86,4 @@ void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _
 };
 
 }
-//CharacterAnimation [end]
+//PlayerThread [end]

@@ -1,29 +1,7 @@
 #include "escape_from_the_island.hpp"
 
-namespace GameLoop //[start]
+namespace GameLoopThread //[start]
 {
-
-//Initialize graphical window and a specified amount of renderers
-void PrepareGameWindowsAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers, const int32_t _WindowWidth, const int32_t _WindowLength, const uint64_t _CountOfRenderers)
-{
-	_GameWindow = SDL_CreateWindow("Escape from the Island -> Character Animation", _WindowWidth, _WindowLength, NULL);
-	
-	for (uint64_t c = NULL; c < _CountOfRenderers; c++)
-		_GameRenderers._Renderers.emplace_back(SDL_CreateRenderer(_GameWindow, NULL));
-
-	return;
-};
-
-//Destroys graphical window and renderers
-void DestroyGameWindowAndRenderers(SDL_Window*& _GameWindow, RCluster& _GameRenderers)
-{
-	for (uint64_t c = NULL; c < _GameRenderers._Renderers.size(); c++)
-		SDL_DestroyRenderer(_GameRenderers._Renderers[c]);
-
-	SDL_DestroyWindow(_GameWindow);
-
-	return;
-};
 
 //Function that takes an user event and transforms it into a player status data and animation
 void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Entity& _Player, TCluster*& _TextureToAnimate, std::array<TCluster, 4>& _PlayerAnimationTClusters, std::mutex& _MutexForMainThread)
@@ -101,7 +79,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 	SDL_Event CurrentUserEvent = SDL_Event();
 	SDL_Event PreviousUserEvent = SDL_Event();
 	//Player's status represented as individual data
-	Entity Player = CharacterAnimation::PutDefaultValuesForPlayer(_ScalingCoeficient);
+	Entity Player = PlayerThread::PutDefaultValuesForPlayer(_ScalingCoeficient);
 	//Texture that should be rendered on screen - thread unsafe
 	SDL_Texture* TextureToRender = nullptr;
 	//Cluster of textures that should be animated - thread unsafe
@@ -112,10 +90,10 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 	std::atomic_bool AnimationInterrupted = false;
 	
 	//Sets the default frame color
-	CharacterAnimation::SetFrameDefaultColorToBlack(_TextureRenderer);
+	WindowRenderHandle::SetFrameDefaultColorToBlack(_TextureRenderer);
 	//The 'AnimatePlayerTextureClusterThread' and 'FrameRenderThread' starts
-	std::thread AnimatePlayerTextureClusterThread(&CharacterAnimation::AnimatePlayerTextureClusterThreadMain, &TextureToRender, &TexturesToAnimate, 300, &AnimationInterrupted, &ThreadShouldFinish);
-	std::thread FrameRenderThread(&CharacterAnimation::FrameRenderThreadMain, _TextureRenderer, &Player, &TextureToRender, &ThreadShouldFinish);
+	std::thread AnimatePlayerTextureClusterThread(&PlayerThread::AnimatePlayerTextureClusterThreadMain, &TextureToRender, &TexturesToAnimate, 300, &AnimationInterrupted, &ThreadShouldFinish);
+	std::thread FrameRenderThread(&PlayerThread::FrameRenderThreadMain, _TextureRenderer, &Player, &TextureToRender, &ThreadShouldFinish);
 	
 	while (true)
 	{
@@ -132,7 +110,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 		{
 			//Thread has to stop animating
 			AnimationInterrupted = true;
-			GameLoop::AssignPlayerStatusAndAnimationToUserEvent(CurrentUserEvent, Player, TexturesToAnimate, _PlayerAnimationTClusters, MutexForMainThread);
+			GameLoopThread::AssignPlayerStatusAndAnimationToUserEvent(CurrentUserEvent, Player, TexturesToAnimate, _PlayerAnimationTClusters, MutexForMainThread);
 			//Thread can continue animating
 			AnimationInterrupted = false;
 		}
@@ -152,4 +130,4 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoefi
 };
 
 }
-//GameLoop [end]
+//GameLoopThread [end]
