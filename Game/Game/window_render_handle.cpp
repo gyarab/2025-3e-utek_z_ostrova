@@ -56,7 +56,7 @@ void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, co
 	}
 
 	LoadBasicWindowsProps(WindowTitle, WindowWidth, WindowLength);
-	_Window = SDL_CreateWindow(WindowTitle.c_str(), WindowWidth, WindowLength, NULL);
+	_Window = SDL_CreateWindow(WindowTitle.c_str(), (int32_t)WindowWidth, (int32_t)WindowLength, NULL);
 
 	if (_Window == nullptr)
 		ErrorHandle::ReportSDL(true);

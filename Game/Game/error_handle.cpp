@@ -17,7 +17,7 @@ void Report(const std::string& _ErrorMessage, const uint64_t _ErrorCode, const b
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
 	SDL_Quit();
 	//Process ends here - function doesnt return
-	std::exit(_ErrorCode);
+	std::exit((int32_t)_ErrorCode);
 
 	return;
 };
