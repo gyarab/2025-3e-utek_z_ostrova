@@ -114,6 +114,18 @@ void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 }
 //WindowRenderHandle [end]
 
+namespace TextureHandle //[start]
+{
+//Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
+SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoefficient = 1);
+//Function that safely removes from selected cluster
+void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
+//Fills the four TClusters with textures from .png files
+void PrepareAllPlayerAnimationTextures(SDL_Renderer* const _TextureRenderer, std::array<TCluster, 4>& _PlayerAnimationTClusters, const uint64_t _ScalingCoeficient);
+}
+//TextureHandle [end]
+
+
 namespace GameLoopThread //[start]
 {
 //Function that takes an user event and transforms it into a player status data and animation
@@ -134,25 +146,13 @@ void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _
 }
 //PlayerThread [end]
 
-namespace TextureHandle //[start]
+namespace BackgroundThread //[start]
 {
-//Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
-SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoefficient = 1);
-//Function that safely removes from selected cluster
-void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
-//Fills the four TClusters with textures from .png files
-void PrepareAllPlayerAnimationTextures(SDL_Renderer* const _TextureRenderer, std::array<TCluster, 4>& _PlayerAnimationTClusters, const uint64_t _ScalingCoeficient);
-}
-//TextureHandle [end]
 
-namespace ErrorHandle //[start]
-{
-//Place an error related to specified code and terminate process eventually
-void Report(const std::string& _ErrorMessage, const uint64_t _ErrorCode, const bool _TerminateProcess);
-//Place an error related to SDL-lib and terminate process eventually
-void ReportSDL(const bool _TerminateProcess);
-}
-//ErrorHandle [end]
+
+
+};
+//BackgroundThread [end]
 
 namespace ConfigFile //[start]
 {
@@ -170,6 +170,15 @@ void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const
 void UpdateValue(const std::string& _Bundle, const std::string& _Selector, const std::string& _NewValue);
 }
 //ConfigFile [end]
+
+namespace ErrorHandle //[start]
+{
+//Place an error related to specified code and terminate process eventually
+void Report(const std::string& _ErrorMessage, const uint64_t _ErrorCode, const bool _TerminateProcess);
+//Place an error related to SDL-lib and terminate process eventually
+void ReportSDL(const bool _TerminateProcess);
+}
+//ErrorHandle [end]
 
 namespace RuntimeLog //[start]
 {
