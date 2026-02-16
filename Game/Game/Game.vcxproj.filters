@@ -39,6 +39,9 @@
     <ClCompile Include="window_render_handle.cpp">
       <Filter>Zdrojové soubory</Filter>
     </ClCompile>
+    <ClCompile Include="background_thread.cpp">
+      <Filter>Zdrojové soubory</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="escape_from_the_island.hpp">
