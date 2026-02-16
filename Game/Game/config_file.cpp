@@ -18,7 +18,7 @@ static void ExtractFileIntoLines(std::vector<std::string>& _FileLines)
 	std::fstream FileHandle(SDL_GetBasePath() + INI_FILE_NAME, std::ios::in);
 
 	if (FileHandle.fail())
-		ErrorHandle::Report("could not find/open config file \"config.ini\"", -1, true);
+		ErrorHandle::Report("could not find/open config file {\"config.ini\"}", -1, true);
 
 	_FileLines.clear();
 
