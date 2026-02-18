@@ -123,5 +123,25 @@ void Message(const LogTypes _Type, const std::string& _Message)
 	return;
 };
 
+//Makes one message out of any amount of other messages separated by the '=>' arrow then it puts it in the log file as one message - usage without existing log file may be unsafe
+void MultiMessage(const LogTypes _Type, const std::initializer_list<const std::string> _MultipleMessages)
+{
+	std::string ResultMessage;
+
+	if (_MultipleMessages.size() == 0)
+		return;
+
+	//Form one message from all the other messages
+	for (std::string OneMessage : _MultipleMessages)
+		ResultMessage += (OneMessage + " => ");
+
+	//Delete the extra '=>' arrow at the end of the message
+	ResultMessage.erase(ResultMessage.rfind(" => "));
+	//Put the message to log file
+	RuntimeLog::Message(_Type, ResultMessage);
+
+	return;
+};
+
 }
 //RuntimeLog [end]
