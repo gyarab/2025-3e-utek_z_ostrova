@@ -11,6 +11,7 @@
 #include <string>
 #include <vector>
 #include <array>
+#include <set>
 #include <thread>
 #include <atomic>
 #include <mutex>
@@ -116,12 +117,12 @@ void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 
 namespace TextureHandle //[start]
 {
-//Extracts PNG into surface then [optionally] scales it by a coefficient and then converts it to a render-able texture
-SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRenderer, const std::string& _Filename, const uint64_t _ScalingCoefficient = 1);
+//
+std::vector<TCluster> LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
+//
+void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, std::vector<TCluster>& _PlayerTextures, std::vector<TCluster>& _Level1Textures);
 //Function that safely removes from selected cluster
 void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
-//Fills the four TClusters with textures from .png files
-void PrepareAllPlayerAnimationTextures(SDL_Renderer* const _TextureRenderer, std::array<TCluster, 4>& _PlayerAnimationTClusters, const uint64_t _ScalingCoeficient);
 }
 //TextureHandle [end]
 
@@ -186,6 +187,8 @@ namespace RuntimeLog //[start]
 void CreateFile(void);
 //Appends a new message to already existing log file
 void Message(const LogTypes _Type, const std::string& _Message);
+//Makes one message out of any amount of other messages separated by the '=>' arrow then it puts it in the log file as one message - usage without existing log file may be unsafe
+void MultiMessage(const LogTypes _Type, const std::initializer_list<const std::string> _MultipleMessages);
 }
 //RuntimeLog [end]
 
