@@ -21,7 +21,10 @@ static SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRendere
 	SDL_Surface* ExtractedData = IMG_LoadPNG_IO(PNG_File);
 
 	if (ExtractedData == nullptr)
+	{
 		ErrorHandle::ReportSDL(true);
+		std::exit(-1); //
+	}
 
 	SDL_Surface* ScaledExtractedData = SDL_ScaleSurface(ExtractedData, (int32_t)_ScalingCoefficient * ExtractedData->w, (int32_t)_ScalingCoefficient * ExtractedData->h, SDL_SCALEMODE_NEAREST);
 
@@ -66,7 +69,7 @@ std::vector<TCluster> LoadFromFiles(SDL_Renderer* const _TextureRenderer, const 
 	std::vector<TCluster> ResultTextureClusters;
 	std::string GraphicsDir, TextureFormat, TextureFilename;
 	int64_t TextureScalingCoefficient = NULL;
-	
+
 	LoadBasicTextureProps(GraphicsDir, TextureFormat, TextureScalingCoefficient);
 
 	const std::string FullGraphicsDir = SDL_GetBasePath() + GraphicsDir + "\\";
