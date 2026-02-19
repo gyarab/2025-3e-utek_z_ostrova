@@ -21,20 +21,15 @@ int WinMain(int argc, char** argv)
 	constexpr uint64_t PlayerTextureScalingCoefficient = 4; //Scales default 32x32 textures to 128x128 textures
 	
 	//Initialize texture clusters
-	std::array<TCluster, 4> PlayerAnimationTClusters =
-	{
-		TCluster(),
-		TCluster(),
-		TCluster(),
-		TCluster()
-	};
+	std::vector<TCluster> PlayerTClusters;
+	std::vector<TCluster> Level1TClusters;
 
 	//Prepare window and renderer for game loop
 	WindowRenderHandle::CreateNewWindowWithRenderers(GameWindow, GameRenderers, CountOfGameRenderers);
 	//Prepare textures
-	TextureHandle::PrepareAllPlayerAnimationTextures(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerAnimationTClusters, PlayerTextureScalingCoefficient);
+	TextureHandle::PrepareAllNeeded(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters);
 	//Game starts
-	GameLoopThread::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoefficient, PlayerAnimationTClusters);
+	GameLoopThread::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoefficient, PlayerTClusters);
 	//Destroy game window and renderer before closing program
 	WindowRenderHandle::DestroyWindowWithRenderers(GameWindow, GameRenderers);
 
