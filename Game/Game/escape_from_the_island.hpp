@@ -24,6 +24,8 @@
 #include <SDL3_image/SDL_image.h>
 
 //
+#include "RCluster.hpp"
+#include "TCluster.hpp"
 #include "config_file_content_info.hpp"
 
 //Allowing functions to be inlined only if the build is 'Release'
@@ -65,22 +67,6 @@ enum PlayerAnimationTClustersIndexes : uint64_t
 	STANDING_FACING_LEFT = 2,
 	STANDING_FACING_RIGHT = 3
 };
-
-//Add pointer safety!
-//Dynamic cluster that should contain textures that are related to each other
-typedef struct ClusterOfSimilarTextures
-{
-	std::vector<SDL_Texture*> _Textures;
-}
-TCluster;
-
-//Add pointer safety!
-//Dynamic cluster that should contain renderers that are related to each other
-typedef struct ClusterOfSimilarRenderers
-{
-	std::vector<SDL_Renderer*> _Renderers;
-}
-RCluster;
 
 //All possible direction that entity can face
 enum Directions : uint64_t
