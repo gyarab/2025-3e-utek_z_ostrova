@@ -104,32 +104,27 @@ void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 namespace TextureHandle //[start]
 {
 //
-std::vector<TCluster> LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
+TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
 //
-void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, std::vector<TCluster>& _PlayerTextures, std::vector<TCluster>& _Level1Textures);
+void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTextures, TCluster_2D& _Level1Textures);
 //Function that safely removes from selected cluster
 void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
 }
 //TextureHandle [end]
 
-
 namespace GameLoopThread //[start]
 {
-//Function that takes an user event and transforms it into a player status data and animation
-void AssignPlayerStatusAndAnimationToUserEvent(const SDL_Event& _UserEvent, Entity& _Player, TCluster*& _TextureToAnimate, std::array<TCluster, 4>& _PlayerAnimationTClusters, std::mutex& _MutexForMainThread);
 //Loop for processing user events and rendering the game - runs on 'Main thread'
-void MainLoop(SDL_Renderer* const _TextureRenderer, const uint64_t _ScalingCoeficient, std::array<TCluster, 4>& _PlayerAnimationTClusters);
+void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTClusters, TCluster& _BackgroundTCluster);
 }
 //GameLoopThread [end]
 
 namespace PlayerThread //[start]
 {
 //Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
-Entity PutDefaultValuesForPlayer(const uint64_t _ScalingCoefficient = 1);
+Entity PutDefaultValues(void);
 //Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
-void AnimatePlayerTextureClusterThreadMain(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish);
-//Thread that constantly updates the screen with an animation of player's character + it can also change the player's coords
-void FrameRenderThreadMain(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _TextureToRender, std::atomic_bool* const _ThreadShouldFinish);
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish);
 }
 //PlayerThread [end]
 

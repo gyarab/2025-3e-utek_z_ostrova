@@ -13,23 +13,23 @@ int WinMain(int argc, char** argv)
 	
 	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere
 
-	//Initialize main variables
+	//Initialize window and renderers variables
 	SDL_Window* GameWindow = nullptr;
-	constexpr int32_t Width = 1280, Length = 720; //16:9 HD 720p
 	RCluster GameRenderers = RCluster();
 	constexpr uint64_t CountOfGameRenderers = 1;
-	constexpr uint64_t PlayerTextureScalingCoefficient = 4; //Scales default 32x32 textures to 128x128 textures
 	
 	//Initialize texture clusters
-	std::vector<TCluster> PlayerTClusters;
-	std::vector<TCluster> Level1TClusters;
+	TCluster_2D PlayerTClusters;
+	TCluster_2D Level1TClusters;
 
 	//Prepare window and renderer for game loop
 	WindowRenderHandle::CreateNewWindowWithRenderers(GameWindow, GameRenderers, CountOfGameRenderers);
+	//Sets the default frame color
+	WindowRenderHandle::SetFrameDefaultColorToBlack(GameRenderers._Renderers[TEXTURE_RENDERER]);
 	//Prepare textures
 	TextureHandle::PrepareAllNeeded(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters);
 	//Game starts
-	GameLoopThread::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTextureScalingCoefficient, PlayerTClusters);
+	GameLoopThread::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters._Textures[0]);
 	//Destroy game window and renderer before closing program
 	WindowRenderHandle::DestroyWindowWithRenderers(GameWindow, GameRenderers);
 
