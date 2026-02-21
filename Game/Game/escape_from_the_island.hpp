@@ -125,7 +125,7 @@ namespace PlayerThread //[start]
 //Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
 Entity PutDefaultValues(void);
 //Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish);
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish);
 }
 //PlayerThread [end]
 

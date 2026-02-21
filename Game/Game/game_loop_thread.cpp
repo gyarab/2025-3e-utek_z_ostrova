@@ -97,9 +97,8 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 {
 	//Mutex to safely operate with critical sector of 'MainThread'
 	std::mutex MutexForMainThread;
-	//Containers holding current and previously made events
-	SDL_Event CurrentUserEvent = SDL_Event();
-	SDL_Event PreviousUserEvent = SDL_Event();
+	//Containers holding currently made events
+	SDL_Event UserEvent = SDL_Event();
 	//Player's status represented as individual data
 	Entity Player = PlayerThread::PutDefaultValues();
 	//Temp storage for background size - will be changed!
@@ -112,35 +111,22 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 	TCluster* BackgroundTexturesToAnimate = &_BackgroundTCluster; //Setting a default textures to animate so something will always be on the screen
 	//Variable that tells the supportive threads when to stop
 	std::atomic_bool ThreadShouldFinish = false;
-	//Variable that tells the 'PlayerThread' to stop animating for a while when the animation textures have to be changed
-	std::atomic_bool AnimationInterrupted = false;
 	
 	//The supportive threads starts
-	std::thread PlayerThread(&PlayerThread::Main, &PlayerActiveTexture, &PlayerTexturesToAnimate, 250, &Player, &AnimationInterrupted, &ThreadShouldFinish);
+	std::thread PlayerThread(&PlayerThread::Main, &PlayerActiveTexture, &PlayerTexturesToAnimate, 250, &Player, &ThreadShouldFinish);
 	std::thread BackgroundThread(&BackgroundThread::Main, &BackgroundActiveTexture, &BackgroundTexturesToAnimate, 300, &ThreadShouldFinish);
 
 	while (true)
 	{
 		//Get event poll and process it
-		SDL_PollEvent(&CurrentUserEvent);
+		SDL_PollEvent(&UserEvent);
 
 		//User requested to close the window - shutdown the game
-		if (CurrentUserEvent.type == SDL_EVENT_QUIT)
+		if (UserEvent.type == SDL_EVENT_QUIT)
 			break;
 
 		//User pressed key A or D or released them - or didn't do anything new
-		//Run this function only if the current event is different than the previous
-		if (IsDifferentEvent(CurrentUserEvent, PreviousUserEvent))
-		{
-			//Thread has to stop animating
-			AnimationInterrupted = true;
-			InterpretUserEvent(CurrentUserEvent, Player, PlayerTexturesToAnimate, _PlayerTClusters, MutexForMainThread);
-			//Thread can continue animating
-			AnimationInterrupted = false;
-		}
-
-		//Save current event as previous to compare it later with new event
-		PreviousUserEvent = CurrentUserEvent;
+		InterpretUserEvent(UserEvent, Player, PlayerTexturesToAnimate, _PlayerTClusters, MutexForMainThread);
 		//Render current frame
 		RenderFrame(_TextureRenderer, &Player, &PlayerActiveTexture, &BackgroundActiveTexture, &BackGroundSize);
 		//This ensures that only ~1000 events will be collected and frames renderered in a second <- More is not needed

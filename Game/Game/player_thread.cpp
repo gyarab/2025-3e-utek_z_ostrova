@@ -25,6 +25,8 @@ static INLINE void ChangePlayerCoords(Entity& _Player)
 		default:
 			break;
 		}
+
+	return;
 };
 
 namespace PlayerThread //[start]
@@ -41,19 +43,15 @@ Entity PutDefaultValues(void)
 };
 
 //Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish)
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//Mutex to safely operate with critical sector from 'PlayerThread'
 	std::mutex MutexForPlayerThread;
-	//Dynamic thread waiting method using mutex-lock with condition variable - waiting can be interrupted even before it ends
-	std::mutex WaitingMutex;
-	std::unique_lock<std::mutex> WaitingLock(WaitingMutex);
-	std::condition_variable WaitingCondition;
-
+	
 	//main thread loop
 	while (!*_ThreadShouldFinish)
 	{
-		if (*_TexturesToAnimate == nullptr || *_AnimationInterrupted == true)
+		if (*_TexturesToAnimate == nullptr)
 			continue; //make as error!
 
 		for (uint64_t c = NULL; c < (*_TexturesToAnimate)->_Textures.size(); c++)
@@ -63,10 +61,7 @@ void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, 
 			*_DisplayedTexture = (*_TexturesToAnimate)->_Textures[c];
 			MutexForPlayerThread.unlock();
 			//This ensures that only at maximum ~3 frames will be animated in a second [max. ~3FPS], resulting in smooth animation
-			WaitingCondition.wait_for(WaitingLock, (std::chrono::milliseconds)_TextureUpdateDelay);
-			
-			if (*_AnimationInterrupted == true)
-				break;
+			std::this_thread::sleep_for((std::chrono::milliseconds)_TextureUpdateDelay);
 		}
 	}
 
