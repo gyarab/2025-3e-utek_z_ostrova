@@ -64,9 +64,9 @@ void PutDefaultTexture(SDL_Renderer* const _TextureRenderer, SDL_Texture*& _Text
 };
 
 //
-std::vector<TCluster> LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster)
+TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster)
 {
-	std::vector<TCluster> ResultTextureClusters;
+	TCluster_2D ResultTextureClusters;
 	std::string GraphicsDir, TextureFormat, TextureFilename;
 	int64_t TextureScalingCoefficient = NULL;
 
@@ -82,12 +82,12 @@ std::vector<TCluster> LoadFromFiles(SDL_Renderer* const _TextureRenderer, const 
 	{
 		//
 		if (NumberIsInSet(c, _WhenCreateNewCluster))
-			ResultTextureClusters.push_back(TCluster());
+			ResultTextureClusters._Textures.push_back(TCluster());
 
 		//
 		std::getline(TexturesDB, TextureFilename);
 		//
-		ResultTextureClusters[ResultTextureClusters.size() - 1]._Textures.push_back(
+		ResultTextureClusters._Textures[ResultTextureClusters._Textures.size() - 1]._Textures.push_back(
 			MakeScaledTextureFromPNG(_TextureRenderer, FullGraphicsDir + TextureFilename + "." + TextureFormat, TextureScalingCoefficient)
 		);
 	}
@@ -98,7 +98,7 @@ std::vector<TCluster> LoadFromFiles(SDL_Renderer* const _TextureRenderer, const 
 };
 
 //
-void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, std::vector<TCluster>& _PlayerTextures, std::vector<TCluster>& _Level1Textures)
+void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTextures, TCluster_2D& _Level1Textures)
 {
 	std::string PlayerTextures, Level1Textures;
 
