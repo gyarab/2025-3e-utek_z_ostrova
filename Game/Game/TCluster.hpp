@@ -15,7 +15,7 @@ TCluster;
 //2D Dynamic cluster that should contain textures that are related to each other but could be splitted into multiple clusters at once
 typedef struct MultipleClustersOfSimilarTextures
 {
-	std::vector<std::vector<SDL_Texture*>> _Textures;
+	std::vector<TCluster> _Textures;
 }
 TCluster_2D;
 
