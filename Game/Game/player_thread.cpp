@@ -43,7 +43,7 @@ Entity PutDefaultValues(void)
 //Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
 void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _AnimationInterrupted, std::atomic_bool* const _ThreadShouldFinish)
 {
-	//Mutex to safely operate with critical sector from 'AnimatePlayerTextureClusterThread'
+	//Mutex to safely operate with critical sector from 'PlayerThread'
 	std::mutex MutexForPlayerThread;
 	//Dynamic thread waiting method using mutex-lock with condition variable - waiting can be interrupted even before it ends
 	std::mutex WaitingMutex;
@@ -54,7 +54,7 @@ void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, 
 	while (!*_ThreadShouldFinish)
 	{
 		if (*_TexturesToAnimate == nullptr || *_AnimationInterrupted == true)
-			continue;
+			continue; //make as error!
 
 		for (uint64_t c = NULL; c < (*_TexturesToAnimate)->_Textures.size(); c++)
 		{

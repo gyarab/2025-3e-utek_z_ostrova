@@ -27,6 +27,7 @@
 #include "RCluster.hpp"
 #include "TCluster.hpp"
 #include "config_file_content_info.hpp"
+#include "error_messages_codes.hpp"
 
 //Allowing functions to be inlined only if the build is 'Release'
 #if _DEBUG == 1
@@ -42,7 +43,7 @@ using namespace std::chrono_literals;
 //Make it more dynamic!
 //Default values for player's textures on screen
 #define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
-#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 100.0f
+#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 510.0f
 
 //All types of messages that can be logged
 enum LogTypes : uint64_t
@@ -130,9 +131,8 @@ void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, 
 
 namespace BackgroundThread //[start]
 {
-
-
-
+//
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
 };
 //BackgroundThread [end]
 

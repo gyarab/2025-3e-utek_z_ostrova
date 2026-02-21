@@ -68,14 +68,15 @@ static void InterpretUserEvent(const SDL_Event& _UserEvent, Entity& _Player, TCl
 };
 
 //Thread that constantly updates the screen with an animation of player's character + it can also change the player's coords
-static INLINE void RenderFrame(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _TextureToRender)
+static INLINE void RenderFrame(SDL_Renderer* const _TextureRenderer, Entity* const _Player, SDL_Texture** const _PlayerActiveTexture, SDL_Texture** const _BackgroundActiveTexture, SDL_FRect* const _BackgroundSize)
 {
-	if (*_TextureToRender == nullptr)
+	if (*_PlayerActiveTexture == nullptr || *_BackgroundActiveTexture == nullptr)
 		return;
 
 	//
 	SDL_RenderClear(_TextureRenderer);
-	SDL_RenderTexture(_TextureRenderer, *_TextureToRender, NULL, &_Player->_PositionAndSize);
+	SDL_RenderTexture(_TextureRenderer, *_BackgroundActiveTexture, NULL, _BackgroundSize);
+	SDL_RenderTexture(_TextureRenderer, *_PlayerActiveTexture, NULL, &_Player->_PositionAndSize);
 	SDL_RenderPresent(_TextureRenderer);
 	
 	return;
@@ -101,18 +102,22 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 	SDL_Event PreviousUserEvent = SDL_Event();
 	//Player's status represented as individual data
 	Entity Player = PlayerThread::PutDefaultValues();
-	//Texture that should be rendered on screen - thread unsafe
-	SDL_Texture* TextureToRender = nullptr;
+	//Temp storage for background size - will be changed!
+	SDL_FRect BackGroundSize = SDL_FRect(0, 0, 1280, 720);
+	//Textures that should be rendered on screen - thread unsafe
+	SDL_Texture* PlayerActiveTexture = nullptr;
+	SDL_Texture* BackgroundActiveTexture = nullptr;
 	//Cluster of textures that should be animated - thread unsafe
-	TCluster* TexturesToAnimate = &_PlayerTClusters._Textures[STANDING_FACING_LEFT]; //Setting a default textures to animate so something will always be on the screen
-	//Variable that tells the 'PlayerThread' when to stop
+	TCluster* PlayerTexturesToAnimate = &_PlayerTClusters._Textures[STANDING_FACING_LEFT]; //Setting a default textures to animate so something will always be on the screen
+	TCluster* BackgroundTexturesToAnimate = &_BackgroundTCluster; //Setting a default textures to animate so something will always be on the screen
+	//Variable that tells the supportive threads when to stop
 	std::atomic_bool ThreadShouldFinish = false;
 	//Variable that tells the 'PlayerThread' to stop animating for a while when the animation textures have to be changed
 	std::atomic_bool AnimationInterrupted = false;
 	
-	//The 'PlayerThread' starts
-	std::thread PlayerThread(&PlayerThread::Main, &TextureToRender, &TexturesToAnimate, 250, &Player, &AnimationInterrupted, &ThreadShouldFinish);
-	//std::thread BackgroundThread
+	//The supportive threads starts
+	std::thread PlayerThread(&PlayerThread::Main, &PlayerActiveTexture, &PlayerTexturesToAnimate, 250, &Player, &AnimationInterrupted, &ThreadShouldFinish);
+	std::thread BackgroundThread(&BackgroundThread::Main, &BackgroundActiveTexture, &BackgroundTexturesToAnimate, 300, &ThreadShouldFinish);
 
 	while (true)
 	{
@@ -129,7 +134,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 		{
 			//Thread has to stop animating
 			AnimationInterrupted = true;
-			InterpretUserEvent(CurrentUserEvent, Player, TexturesToAnimate, _PlayerTClusters, MutexForMainThread);
+			InterpretUserEvent(CurrentUserEvent, Player, PlayerTexturesToAnimate, _PlayerTClusters, MutexForMainThread);
 			//Thread can continue animating
 			AnimationInterrupted = false;
 		}
@@ -137,14 +142,15 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 		//Save current event as previous to compare it later with new event
 		PreviousUserEvent = CurrentUserEvent;
 		//Render current frame
-		RenderFrame(_TextureRenderer, &Player, &TextureToRender);
+		RenderFrame(_TextureRenderer, &Player, &PlayerActiveTexture, &BackgroundActiveTexture, &BackGroundSize);
 		//This ensures that only ~1000 events will be collected and frames renderered in a second <- More is not needed
 		std::this_thread::sleep_for((std::chrono::milliseconds)1);
 	}
 
-	//Telling the 'PlayerThread' to stop and waiting for them to join
+	//Telling the supportive threads to stop and waiting for them to join
 	ThreadShouldFinish = true;
 	PlayerThread.join();
+	BackgroundThread.join();
 	
 	return;
 };
