@@ -1,6 +1,6 @@
 #include "escape_from_the_island.hpp"
 
-//
+//Function that loads the basic info from config file on how textures should be processed
 static INLINE void LoadBasicTextureProps(std::string& _GraphicsDir, std::string& _TextureFormat, int64_t& _TextureScalingCoefficient)
 {
 	ConfigFile::ReadValue(BUNDLE_AppAssetConfig, SELECTOR_tGraphicsDir, _GraphicsDir);
@@ -23,7 +23,7 @@ static SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRendere
 	if (ExtractedData == nullptr)
 	{
 		ErrorHandle::ReportSDL(true);
-		std::exit(-1); //
+		std::exit(-1); //Temp solution for the compiler warning that was produced here, remove if possible!
 	}
 
 	SDL_Surface* ScaledExtractedData = SDL_ScaleSurface(ExtractedData, (int32_t)_ScalingCoefficient * ExtractedData->w, (int32_t)_ScalingCoefficient * ExtractedData->h, SDL_SCALEMODE_NEAREST);
@@ -45,7 +45,7 @@ static SDL_Texture* MakeScaledTextureFromPNG(SDL_Renderer* const _TextureRendere
 	return FinishedTexture;
 };
 
-//
+//Checks if the specified number is in the set of numbers or no
 static INLINE bool NumberIsInSet(const uint64_t _Number, const std::set<uint64_t>& _Set)
 {
 	for (const uint64_t Element : _Set)
@@ -57,13 +57,13 @@ static INLINE bool NumberIsInSet(const uint64_t _Number, const std::set<uint64_t
 namespace TextureHandle //[start]
 {
 
-//
+//Puts a pixels of default texture into a specified texture
 void PutDefaultTexture(SDL_Renderer* const _TextureRenderer, SDL_Texture*& _Texture)
 {
 	
 };
 
-//
+//Loads and prepares of the textures from image files based on the filenames specified in a db file and makes a 2D TCluster from them
 TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster)
 {
 	TCluster_2D ResultTextureClusters;
@@ -80,13 +80,13 @@ TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::strin
 
 	for (uint64_t c = NULL; c < _TextureCount /*&& !TexturesDB.eof()*/; c++)
 	{
-		//
+		//Checks if new TCluster need to be created on this index and does it if needed
 		if (NumberIsInSet(c, _WhenCreateNewCluster))
 			ResultTextureClusters._Textures.push_back(TCluster());
 
-		//
+		//Loads one file from the db file - there should be one valid texture filename
 		std::getline(TexturesDB, TextureFilename);
-		//
+		//makes texture from that file and adds to the TCluster - it may fail theres an invalid filename or the file is corrupted
 		ResultTextureClusters._Textures[ResultTextureClusters._Textures.size() - 1]._Textures.push_back(
 			MakeScaledTextureFromPNG(_TextureRenderer, FullGraphicsDir + TextureFilename + "." + TextureFormat, TextureScalingCoefficient)
 		);
@@ -97,14 +97,14 @@ TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::strin
 	return ResultTextureClusters;
 };
 
-//
+//Function that loas the texture filenames from db files and call the function that loads them - this function may be removed soon!
 void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTextures, TCluster_2D& _Level1Textures)
 {
 	std::string PlayerTextures, Level1Textures;
 
 	ConfigFile::ReadValue(BUNDLE_AppAssetConfig, SELECTOR_tPlayerTextures, PlayerTextures);
 	ConfigFile::ReadValue(BUNDLE_AppAssetConfig, SELECTOR_tLevel1Textures, Level1Textures);
-	//
+	//Loads the textures in order based on the db files
 	_PlayerTextures = TextureHandle::LoadFromFiles(_TextureRenderer, PlayerTextures, 12, { 0, 4, 8, 10 }); //move the numeric values to the db file too!
 	_Level1Textures = TextureHandle::LoadFromFiles(_TextureRenderer, Level1Textures, 3, { 0 }); //move the numeric values to the db file too!
 

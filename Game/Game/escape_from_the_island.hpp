@@ -1,12 +1,13 @@
 #ifndef ESCAPE_FROM_THE_ISLAND
 #define ESCAPE_FROM_THE_ISLAND
 
-//current game version: 1.0.0.0
+//Current game version: 1.0.0.0
 
 //Accelerate rendering on GPU!
 //Add better app/game icon!
+//Everything needs to be scaled even the coords and movespeed!
 
-//standard C++ lib - some yet unused
+//Standard C++ lib - some yet unused
 #include <iostream>
 #include <string>
 #include <vector>
@@ -23,7 +24,7 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
-//
+//Other internal headers with definitions that are important for this program
 #include "RCluster.hpp"
 #include "TCluster.hpp"
 #include "config_file_content_info.hpp"
@@ -43,7 +44,7 @@ using namespace std::chrono_literals;
 //Make it more dynamic!
 //Default values for player's textures on screen
 #define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
-#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 510.0f
+#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 127.0f * 4.0f //Temp!
 
 //All types of messages that can be logged
 enum LogTypes : uint64_t
@@ -104,9 +105,9 @@ void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 
 namespace TextureHandle //[start]
 {
-//
+//Loads and prepares of the textures from image files based on the filenames specified in a db file and makes a 2D TCluster from them
 TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
-//
+//Function that loas the texture filenames from db files and call the function that loads them - this function may be removed soon!
 void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTextures, TCluster_2D& _Level1Textures);
 //Function that safely removes from selected cluster
 void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
@@ -122,16 +123,16 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 
 namespace PlayerThread //[start]
 {
-//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
+//Function used to initialize Entity container for player with 'default' values
 Entity PutDefaultValues(void);
-//Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
+//Thread that makes player move by changing its horizontal coords and animating its textures
 void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish);
 }
 //PlayerThread [end]
 
 namespace BackgroundThread //[start]
 {
-//
+//Thread that animates the water on the background by animating its textures
 void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
 };
 //BackgroundThread [end]

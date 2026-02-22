@@ -73,7 +73,7 @@ static INLINE void RenderFrame(SDL_Renderer* const _TextureRenderer, Entity* con
 	if (*_PlayerActiveTexture == nullptr || *_BackgroundActiveTexture == nullptr)
 		return;
 
-	//
+	//Firstly render a black background, the render all the given textures in order and then update the screen with the new frame
 	SDL_RenderClear(_TextureRenderer);
 	SDL_RenderTexture(_TextureRenderer, *_BackgroundActiveTexture, NULL, _BackgroundSize);
 	SDL_RenderTexture(_TextureRenderer, *_PlayerActiveTexture, NULL, &_Player->_PositionAndSize);

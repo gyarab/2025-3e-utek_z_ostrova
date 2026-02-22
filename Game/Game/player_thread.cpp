@@ -32,7 +32,7 @@ static INLINE void ChangePlayerCoords(Entity& _Player)
 namespace PlayerThread //[start]
 {
 
-//Function used to initialize Entity container with 'default' values - should be equal to '_ScalingCoefficient'
+//Function used to initialize Entity container for player with 'default' values
 Entity PutDefaultValues(void)
 {
 	int64_t ScalingCoefficient = NULL;
@@ -42,7 +42,7 @@ Entity PutDefaultValues(void)
 		Entity(LEFT, false, SDL_FRect(ENTITY_PLAYER_DEFAULT_SCREEN_POSITION, ENTITY_PLAYER_DEFAULT_SCREEN_POSITION, ScalingCoefficient * ENTITY_PLAYER_DEFAULT_SIZE, ScalingCoefficient * ENTITY_PLAYER_DEFAULT_SIZE));
 };
 
-//Thread that animates a set cluster of textures by continuously selecting them in order [first->last] with delay
+//Thread that makes player move by changing its horizontal coords and animating its textures
 void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//Mutex to safely operate with critical sector from 'PlayerThread'

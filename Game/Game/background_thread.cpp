@@ -3,7 +3,7 @@
 namespace BackgroundThread //[start]
 {
 
-//
+//Thread that animates the water on the background by animating its textures
 void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//Mutex to safely operate with critical sector from 'BackgroundThread'
@@ -20,7 +20,7 @@ void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, 
 			MutexForBackgroundThread.lock();
 			*_DisplayedTexture = (*_TexturesToAnimate)->_Textures[c];
 			MutexForBackgroundThread.unlock();
-			//
+			//This ensures that only at maximum ~3 frames will be animated in a second [max. ~3FPS], resulting in smooth animation
 			std::this_thread::sleep_for((std::chrono::milliseconds)_TextureUpdateDelay);
 		}
 	}

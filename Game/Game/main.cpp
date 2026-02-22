@@ -11,7 +11,7 @@ int WinMain(int argc, char** argv)
 	if (!SDL_Init(SDL_INIT_VIDEO))
 		ErrorHandle::ReportSDL(true);
 	
-	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere
+	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere! and comments!
 
 	//Initialize window and renderers variables
 	SDL_Window* GameWindow = nullptr;
