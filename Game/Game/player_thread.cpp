@@ -43,7 +43,7 @@ Entity PutDefaultValues(void)
 };
 
 //Thread that makes player move by changing its horizontal coords and animating its textures
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish)
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const std::chrono::milliseconds _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//Mutex to safely operate with critical sector from 'PlayerThread'
 	std::mutex MutexForPlayerThread;
@@ -61,7 +61,7 @@ void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, 
 			*_DisplayedTexture = (*_TexturesToAnimate)->_Textures[c];
 			MutexForPlayerThread.unlock();
 			//This ensures that only at maximum ~3 frames will be animated in a second [max. ~3FPS], resulting in smooth animation
-			std::this_thread::sleep_for((std::chrono::milliseconds)_TextureUpdateDelay);
+			std::this_thread::sleep_for(_TextureUpdateDelay);
 		}
 	}
 

@@ -126,14 +126,14 @@ namespace PlayerThread //[start]
 //Function used to initialize Entity container for player with 'default' values
 Entity PutDefaultValues(void);
 //Thread that makes player move by changing its horizontal coords and animating its textures
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish);
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const std::chrono::milliseconds _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish);
 }
 //PlayerThread [end]
 
 namespace BackgroundThread //[start]
 {
 //Thread that animates the water on the background by animating its textures
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const uint64_t _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
+void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
 };
 //BackgroundThread [end]
 

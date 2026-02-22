@@ -106,8 +106,8 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 	std::atomic_bool ThreadShouldFinish = false;
 	
 	//The supportive threads starts
-	std::thread PlayerThread(&PlayerThread::Main, &PlayerActiveTexture, &PlayerTexturesToAnimate, 250, &Player, &ThreadShouldFinish);
-	std::thread BackgroundThread(&BackgroundThread::Main, &BackgroundActiveTexture, &BackgroundTexturesToAnimate, 300, &ThreadShouldFinish);
+	std::thread PlayerThread(&PlayerThread::Main, &PlayerActiveTexture, &PlayerTexturesToAnimate, 250ms, &Player, &ThreadShouldFinish);
+	std::thread BackgroundThread(&BackgroundThread::Main, &BackgroundActiveTexture, &BackgroundTexturesToAnimate, 300ms, &ThreadShouldFinish);
 
 	while (true)
 	{
@@ -123,7 +123,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 		//Render current frame
 		RenderFrame(_TextureRenderer, &Player, &PlayerActiveTexture, &BackgroundActiveTexture, &BackgroundSize);
 		//This ensures that only ~1000 events will be collected and frames renderered in a second <- More is not needed
-		std::this_thread::sleep_for((std::chrono::milliseconds)1);
+		std::this_thread::sleep_for(1ms);
 	}
 
 	//Telling the supportive threads to stop and waiting for them to join
