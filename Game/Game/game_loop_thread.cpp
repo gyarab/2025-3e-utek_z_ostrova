@@ -82,13 +82,6 @@ static INLINE void RenderFrame(SDL_Renderer* const _TextureRenderer, Entity* con
 	return;
 };
 
-//
-static INLINE bool IsDifferentEvent(const SDL_Event& _FirstEvent, const SDL_Event& _SecondEvent)
-{
-	return
-		!(_FirstEvent.type == _SecondEvent.type && _FirstEvent.key.scancode == _SecondEvent.key.scancode);
-};
-
 namespace GameLoopThread //[start]
 {
 
@@ -102,7 +95,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 	//Player's status represented as individual data
 	Entity Player = PlayerThread::PutDefaultValues();
 	//Temp storage for background size - will be changed!
-	SDL_FRect BackGroundSize = SDL_FRect(0, 0, 1280, 720);
+	SDL_FRect BackgroundSize = SDL_FRect(0, 0, 1280, 720);
 	//Textures that should be rendered on screen - thread unsafe
 	SDL_Texture* PlayerActiveTexture = nullptr;
 	SDL_Texture* BackgroundActiveTexture = nullptr;
@@ -128,7 +121,7 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 		//User pressed key A or D or released them - or didn't do anything new
 		InterpretUserEvent(UserEvent, Player, PlayerTexturesToAnimate, _PlayerTClusters, MutexForMainThread);
 		//Render current frame
-		RenderFrame(_TextureRenderer, &Player, &PlayerActiveTexture, &BackgroundActiveTexture, &BackGroundSize);
+		RenderFrame(_TextureRenderer, &Player, &PlayerActiveTexture, &BackgroundActiveTexture, &BackgroundSize);
 		//This ensures that only ~1000 events will be collected and frames renderered in a second <- More is not needed
 		std::this_thread::sleep_for((std::chrono::milliseconds)1);
 	}
