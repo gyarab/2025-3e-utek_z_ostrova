@@ -109,6 +109,8 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 	std::thread PlayerThread(&PlayerThread::Main, &PlayerActiveTexture, &PlayerTexturesToAnimate, 250ms, &Player, &ThreadShouldFinish);
 	std::thread BackgroundThread(&BackgroundThread::Main, &BackgroundActiveTexture, &BackgroundTexturesToAnimate, 300ms, &ThreadShouldFinish);
 
+	RuntimeLog::Message(INFO, "game loop started => logging disabled");
+
 	while (true)
 	{
 		//Get event poll and process it
@@ -125,6 +127,8 @@ void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTCluster
 		//This ensures that only ~1000 events will be collected and frames renderered in a second <- More is not needed
 		std::this_thread::sleep_for(1ms);
 	}
+
+	RuntimeLog::Message(INFO, "game loop terminated => logging enabled");
 
 	//Telling the supportive threads to stop and waiting for them to join
 	ThreadShouldFinish = true;

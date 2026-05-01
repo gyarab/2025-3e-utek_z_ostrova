@@ -21,7 +21,7 @@ int WinMain(int argc, char** argv)
 	//Initialize texture clusters
 	TCluster_2D PlayerTClusters;
 	TCluster_2D Level1TClusters;
-
+	
 	//Prepare window and renderer for game loop
 	WindowRenderHandle::CreateNewWindowWithRenderers(GameWindow, GameRenderers, CountOfGameRenderers);
 	//Sets the default frame color

@@ -16,6 +16,7 @@
 #define SELECTOR_tAppDir "tAppDir"
 #define SELECTOR_bRuntimeLogEnabled "bRuntimeLogEnabled"
 #define SELECTOR_tLogDir "tLogDir"
+#define SELECTOR_MaxLogFiles "MaxLogFiles"
 #define SELECTOR_tGraphicsDir "tGraphicsDir"
 #define SELECTOR_tTextureFormat "tTextureFormat"
 #define SELECTOR_tPlayerTextures "tPlayerTextures"

@@ -109,7 +109,7 @@ static INLINE void ExtractBasicInfo(const std::string& _Bundle, const std::strin
 //Returns a numberic value based on selector's first char value
 static INLINE SelectorDataType TellSelectorDataType(const std::string& _SpecificSelector)
 {
-	//Anything else than char 'b' and 't' is considerer as number
+	//Anything else than char 'b' or 't' is considered as number
 	return
 		_SpecificSelector[0] == 'b'	? BOOL :
 		_SpecificSelector[0] == 't'	? TEXT :
