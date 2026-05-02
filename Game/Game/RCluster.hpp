@@ -6,10 +6,9 @@
 
 //Add pointer safety!
 //Dynamic cluster that should contain renderers that are related to each other
-typedef struct ClusterOfSimilarRenderers
+struct RCluster
 {
 	std::vector<SDL_Renderer*> _Renderers;
-}
-RCluster;
+};
 
 #endif

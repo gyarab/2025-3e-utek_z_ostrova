@@ -24,18 +24,19 @@
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
-//Other internal headers with definitions that are important for this program
-#include "RCluster.hpp"
-#include "TCluster.hpp"
-#include "config_file_content_info.hpp"
-#include "error_messages_codes.hpp"
-
 //Allowing functions to be inlined only if the build is 'Release'
 #if _DEBUG == 1
 #define INLINE
 #elif NDEBUG == 1
 #define INLINE inline
 #endif
+
+//Other internal headers with definitions that are important for this program
+#include "RCluster.hpp"
+#include "TCluster.hpp"
+#include "entity.hpp"
+#include "config_file_content_info.hpp"
+#include "error_messages_codes.hpp"
 
 //Allowing usage of std literal operators for strings and time
 using namespace std::string_literals;
@@ -78,15 +79,6 @@ enum Directions : uint64_t
 	UP = 2,
 	DOWN = 3
 };
-
-//Container defining a state of an entity
-typedef struct EntityCurrentStatus
-{
-	Directions _Facing;
-	bool _IsRunning;
-	SDL_FRect _PositionAndSize;
-}
-Entity;
 
 namespace WindowRenderHandle //[start]
 {

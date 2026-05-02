@@ -47,7 +47,7 @@ void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, 
 {
 	//Mutex to safely operate with critical sector from 'PlayerThread'
 	std::mutex MutexForPlayerThread;
-	
+
 	//main thread loop
 	while (!*_ThreadShouldFinish)
 	{

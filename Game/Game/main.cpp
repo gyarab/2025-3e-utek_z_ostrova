@@ -6,7 +6,7 @@ int WinMain(int argc, char** argv)
 {
 	//Creating log file
 	RuntimeLog::CreateFile();
-
+	
 	//Initialize library - program gets terminated if this fails
 	if (!SDL_Init(SDL_INIT_VIDEO))
 		ErrorHandle::ReportSDL(true);
@@ -19,8 +19,8 @@ int WinMain(int argc, char** argv)
 	constexpr uint64_t CountOfGameRenderers = 1;
 	
 	//Initialize texture clusters
-	TCluster_2D PlayerTClusters;
-	TCluster_2D Level1TClusters;
+	TCluster PlayerTClusters;
+	TCluster Level1TClusters;
 	
 	//Prepare window and renderer for game loop
 	WindowRenderHandle::CreateNewWindowWithRenderers(GameWindow, GameRenderers, CountOfGameRenderers);
