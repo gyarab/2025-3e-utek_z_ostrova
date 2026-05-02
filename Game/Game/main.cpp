@@ -14,24 +14,27 @@ int WinMain(int argc, char** argv)
 	RuntimeLog::Message(INFO, "SDL-lib successfully initialized"); //Add logs everywhere! and comments!
 
 	//Initialize window and renderers variables
+	WRCluster MainWindow = {};
 	SDL_Window* GameWindow = nullptr;
-	RCluster GameRenderers = RCluster();
 	constexpr uint64_t CountOfGameRenderers = 1;
 	
 	//Initialize texture clusters
 	TCluster PlayerTClusters;
 	TCluster Level1TClusters;
+
+	entity Player;
+	entity Background;
 	
 	//Prepare window and renderer for game loop
-	WindowRenderHandle::CreateNewWindowWithRenderers(GameWindow, GameRenderers, CountOfGameRenderers);
+	WindowRenderHandle::CreateNewWindowWithRenderers(MainWindow, CountOfGameRenderers);
 	//Sets the default frame color
-	WindowRenderHandle::SetFrameDefaultColorToBlack(GameRenderers._Renderers[TEXTURE_RENDERER]);
+	WindowRenderHandle::SetFrameDefaultColorToBlack(MainWindow._Renderers[TEXTURE_RENDERER]);
 	//Prepare textures
-	TextureHandle::PrepareAllNeeded(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters);
+	TextureHandle::PrepareAllNeeded(MainWindow._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters);
 	//Game starts
-	GameLoopThread::MainLoop(GameRenderers._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters._Textures[0]);
+	GameLoopThread::MainLoop(MainWindow._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters._Textures[0]);
 	//Destroy game window and renderer before closing program
-	WindowRenderHandle::DestroyWindowWithRenderers(GameWindow, GameRenderers);
+	WindowRenderHandle::DestroyWindowWithRenderers(MainWindow);
 
 	//Quit the library and close program
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);

@@ -14,9 +14,9 @@ namespace WindowRenderHandle //[start]
 {
 
 //Initialize a specified amount of renderers for a specified window
-void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers)
+void CreateNewRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers)
 {
-	if (_Renderers._Renderers.size() != NULL)
+	if (_WindowAndRenderers._Renderers.size() != NULL)
 	{
 		//ErrorHandle...
 		RuntimeLog::Message(WARNING, "some renderers already exists in the given cluster => new ones cannot be created");
@@ -24,16 +24,16 @@ void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64
 		return;
 	}
 
-	_Renderers._Renderers.clear();
+	_WindowAndRenderers._Renderers.clear();
 
 	for (uint64_t c = NULL; c < _CountOfRenderers; c++)
 	{
-		SDL_Renderer* NewRenderer = SDL_CreateRenderer(_Window, NULL);
+		SDL_Renderer* NewRenderer = SDL_CreateRenderer(_WindowAndRenderers._Window, NULL);
 
 		if (NewRenderer == nullptr)
 			ErrorHandle::ReportSDL(true);
 
-		_Renderers._Renderers.emplace_back(NewRenderer);
+		_WindowAndRenderers._Renderers.emplace_back(NewRenderer);
 	}
 
 	RuntimeLog::Message(INFO, "successfully created {" + std::to_string(_CountOfRenderers) + "} renderer/s");
@@ -42,12 +42,12 @@ void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64
 };
 
 //Initialize graphical window and a specified amount of renderers
-void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers)
+void CreateNewWindowWithRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers)
 {
 	std::string WindowTitle;
 	int64_t WindowWidth = NULL, WindowLength = NULL;
 
-	if (_Window != nullptr)
+	if (_WindowAndRenderers._Window != nullptr)
 	{
 		//ErrorHandle...
 		RuntimeLog::Message(WARNING, "window already exists => it wont get initialized again");
@@ -56,21 +56,21 @@ void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, co
 	}
 
 	LoadBasicWindowsProps(WindowTitle, WindowWidth, WindowLength);
-	_Window = SDL_CreateWindow(WindowTitle.c_str(), (int32_t)WindowWidth, (int32_t)WindowLength, NULL);
+	_WindowAndRenderers._Window = SDL_CreateWindow(WindowTitle.c_str(), (int32_t)WindowWidth, (int32_t)WindowLength, NULL);
 
-	if (_Window == nullptr)
+	if (_WindowAndRenderers._Window == nullptr)
 		ErrorHandle::ReportSDL(true);
 
 	RuntimeLog::Message(INFO, "successfully created main window");
-	WindowRenderHandle::CreateNewRenderers(_Window, _Renderers, _CountOfRenderers);
+	WindowRenderHandle::CreateNewRenderers(_WindowAndRenderers, _CountOfRenderers);
 
 	return;
 };
 
 //Destroys specified renderers
-void DestroyRenderers(SDL_Window*& _Window, RCluster& _Renderers)
+void DestroyRenderers(WRCluster& _WindowAndRenderers)
 {
-	uint64_t CountOfRenderers = _Renderers._Renderers.size();
+	uint64_t CountOfRenderers = _WindowAndRenderers._Renderers.size();
 
 	if (CountOfRenderers == NULL)
 	{
@@ -81,19 +81,19 @@ void DestroyRenderers(SDL_Window*& _Window, RCluster& _Renderers)
 	}
 
 	for (uint64_t c = NULL; c < CountOfRenderers; c++)
-		SDL_DestroyRenderer(_Renderers._Renderers[c]);
+		SDL_DestroyRenderer(_WindowAndRenderers._Renderers[c]);
 
-	_Renderers._Renderers.clear();
+	_WindowAndRenderers._Renderers.clear();
 	RuntimeLog::Message(INFO, "successfully destroyed {" + std::to_string(CountOfRenderers) + "} renderer/s");
 
 	return;
 };
 
 //Destroys graphical window and renderers
-void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers)
+void DestroyWindowWithRenderers(WRCluster& _WindowAndRenderers)
 {
-	WindowRenderHandle::DestroyRenderers(_Window, _Renderers);
-	SDL_DestroyWindow(_Window);
+	WindowRenderHandle::DestroyRenderers(_WindowAndRenderers);
+	SDL_DestroyWindow(_WindowAndRenderers._Window);
 	RuntimeLog::Message(INFO, "successfully destroyed main window");
 
 	return;
