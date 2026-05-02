@@ -32,7 +32,7 @@
 #endif
 
 //Other internal headers with definitions that are important for this program
-#include "RCluster.hpp"
+#include "WRCluster.hpp"
 #include "TCluster.hpp"
 #include "entity.hpp"
 #include "config_file_content_info.hpp"

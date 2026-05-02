@@ -65,7 +65,7 @@
     <ClInclude Include="TCluster.hpp">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
-    <ClInclude Include="RCluster.hpp">
+    <ClInclude Include="WRCluster.hpp">
       <Filter>Hlavičkové soubory</Filter>
     </ClInclude>
     <ClInclude Include="entity.hpp">

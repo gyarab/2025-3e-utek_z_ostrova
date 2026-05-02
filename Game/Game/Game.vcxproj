@@ -165,7 +165,7 @@
     <ClInclude Include="entity.hpp" />
     <ClInclude Include="error_messages_codes.hpp" />
     <ClInclude Include="escape_from_the_island.hpp" />
-    <ClInclude Include="RCluster.hpp" />
+    <ClInclude Include="WRCluster.hpp" />
     <ClInclude Include="resource.hpp" />
     <ClInclude Include="TCluster.hpp" />
   </ItemGroup>
