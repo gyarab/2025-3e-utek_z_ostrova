@@ -38,7 +38,7 @@ public:
 	//Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
 	INLINE void deal_damage_to(entity& _EntityToBeDamaged);
 	//Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
-	INLINE bool hitbox_is_inside_hitbox_of(entity& _AnotherEntity);
+	INLINE bool hitbox_is_touching_hitbox_of(entity& _AnotherEntity);
 
 	//
 };

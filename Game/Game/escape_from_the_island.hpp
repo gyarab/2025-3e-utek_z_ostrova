@@ -35,6 +35,7 @@
 #include "WRCluster.hpp"
 #include "TCluster.hpp"
 #include "entity.hpp"
+#include "ECluster.hpp"
 #include "config_file_content_info.hpp"
 #include "error_messages_codes.hpp"
 
@@ -83,13 +84,13 @@ enum Directions : uint64_t
 namespace WindowRenderHandle //[start]
 {
 //Initialize a specified amount of renderers for a specified window
-void CreateNewRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
+void CreateNewRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers);
 //Initialize graphical window and a specified amount of renderers
-void CreateNewWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers, const uint64_t _CountOfRenderers);
+void CreateNewWindowWithRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers);
 //Destroys specified renderers
-void DestroyRenderers(SDL_Window*& _Window, RCluster& _Renderers);
+void DestroyRenderers(WRCluster& _WindowAndRenderers);
 //Destroys graphical window and renderers
-void DestroyWindowWithRenderers(SDL_Window*& _Window, RCluster& _Renderers);
+void DestroyWindowWithRenderers(WRCluster& _WindowAndRenderers);
 //Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
 void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 }

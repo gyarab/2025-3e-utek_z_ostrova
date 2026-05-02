@@ -1,5 +1,7 @@
 #include "escape_from_the_island.hpp"
 
+//-----<entity>-----
+
 //
 INLINE void entity::load_basic_info(const std::string& _SpecificDB_Filename)
 {
@@ -35,7 +37,7 @@ INLINE void entity::deal_damage_to(entity& _EntityToBeDamaged)
 };
 
 //Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
-INLINE bool entity::hitbox_is_inside_hitbox_of(entity& _AnotherEntity)
+INLINE bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 {
 	return
 		(
@@ -54,5 +56,29 @@ INLINE bool entity::hitbox_is_inside_hitbox_of(entity& _AnotherEntity)
 //Operator for function "hitbox_is_inside_another_hitbox_of"
 INLINE bool operator<=>(entity& _Left, entity& _Right)
 {
-	_Left.hitbox_is_inside_hitbox_of(_Right);
+	_Left.hitbox_is_touching_hitbox_of(_Right);
 };
+
+//-----<entity>-----
+
+//-----<ECluster>-----
+
+//
+INLINE entity& ECluster::operator[](const uint64_t _IndexOfEntity)
+{
+	if (_IndexOfEntity < 0 || _IndexOfEntity >= this->_ClusterOfEntities.size())
+		return; //Error
+
+	return this->_ClusterOfEntities[_IndexOfEntity];
+};
+
+//
+INLINE const entity& ECluster::operator[](const uint64_t _IndexOfEntity) const
+{
+	if (_IndexOfEntity < 0 || _IndexOfEntity >= this->_ClusterOfEntities.size())
+		return; //Error
+
+	return this->_ClusterOfEntities[_IndexOfEntity];
+};
+
+//-----<ECluster>-----
