@@ -174,7 +174,7 @@
     <ResourceCompile Include="escape_from_the_island.rc" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico" />
+    <Image Include="icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />

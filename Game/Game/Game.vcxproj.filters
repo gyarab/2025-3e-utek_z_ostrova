@@ -81,7 +81,7 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="icon1.ico">
+    <Image Include="icon.ico">
       <Filter>Soubory zdrojů</Filter>
     </Image>
   </ItemGroup>
