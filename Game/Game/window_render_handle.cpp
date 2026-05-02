@@ -41,7 +41,7 @@ void CreateNewRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfR
 	return;
 };
 
-//Initialize graphical window and a specified amount of renderers
+//Initialize graphical window and a specified amount of renderers [default amount of renderers is 1]
 void CreateNewWindowWithRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers)
 {
 	std::string WindowTitle;

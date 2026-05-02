@@ -85,8 +85,8 @@ namespace WindowRenderHandle //[start]
 {
 //Initialize a specified amount of renderers for a specified window
 void CreateNewRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers);
-//Initialize graphical window and a specified amount of renderers
-void CreateNewWindowWithRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers);
+//Initialize graphical window and a specified amount of renderers [default amount of renderers is 1]
+void CreateNewWindowWithRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers = 1);
 //Destroys specified renderers
 void DestroyRenderers(WRCluster& _WindowAndRenderers);
 //Destroys graphical window and renderers

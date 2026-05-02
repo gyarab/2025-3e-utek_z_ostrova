@@ -20,12 +20,14 @@ struct entity
 	bool _IsMoving;
 	//Rectange defining both position and size of the entity [not its texture directly]
 	SDL_FRect _Hitbox;
-	//A non-negative number that tells how many hp does the entity have [0 = dead ; -1 = immortal]
+	//A non-negative number that tells how many hp does the entity have [0 = dead]
 	int64_t _Health;
 	//A non-negative number that tells how many hp can the entity take away from another entity [0 = no damage]
 	int64_t _Damage;
 	//Bool that tells whether the entity is alive [hp > 0] or not
 	bool _IsAlive;
+	//Bool that tells whether the entity is immortal or not
+	bool _Immortal;
 
 	//All posible textures the entity can use to display itself
 	TCluster _Textures;
@@ -33,7 +35,7 @@ struct entity
 public:
 	//
 	INLINE void load_basic_info(const std::string& _SpecificDB_Filename);
-	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true
+	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 	INLINE void make_one_movement(void);
 	//Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
 	INLINE void deal_damage_to(entity& _EntityToBeDamaged);

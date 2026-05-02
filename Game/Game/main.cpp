@@ -15,18 +15,16 @@ int WinMain(int argc, char** argv)
 
 	//Initialize window and renderers variables
 	WRCluster MainWindow = {};
-	SDL_Window* GameWindow = nullptr;
-	constexpr uint64_t CountOfGameRenderers = 1;
 	
 	//Initialize texture clusters
 	TCluster PlayerTClusters;
 	TCluster Level1TClusters;
-
-	entity Player;
-	entity Background;
+	
+	//
+	ECluster AllEntities;
 	
 	//Prepare window and renderer for game loop
-	WindowRenderHandle::CreateNewWindowWithRenderers(MainWindow, CountOfGameRenderers);
+	WindowRenderHandle::CreateNewWindowWithRenderers(MainWindow);
 	//Sets the default frame color
 	WindowRenderHandle::SetFrameDefaultColorToBlack(MainWindow._Renderers[TEXTURE_RENDERER]);
 	//Prepare textures
