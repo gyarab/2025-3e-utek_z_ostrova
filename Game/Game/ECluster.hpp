@@ -9,6 +9,7 @@ struct ECluster
 {
 	std::vector<entity> _ClusterOfEntities;
 
+public:
 	//
 	INLINE entity& operator[](const uint64_t _IndexOfEntity);
 	//

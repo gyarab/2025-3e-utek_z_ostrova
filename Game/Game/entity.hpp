@@ -27,7 +27,7 @@ struct entity
 	//Bool that tells whether the entity is alive [hp > 0] or not
 	bool _IsAlive;
 	//Bool that tells whether the entity is immortal or not
-	bool _Immortal;
+	bool _IsImmortal;
 
 	//All posible textures the entity can use to display itself
 	TCluster _Textures;

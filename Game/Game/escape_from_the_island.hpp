@@ -99,11 +99,11 @@ void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
 namespace TextureHandle //[start]
 {
 //Loads and prepares of the textures from image files based on the filenames specified in a db file and makes a 2D TCluster from them
-TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
+TCluster LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
 //Function that loas the texture filenames from db files and call the function that loads them - this function may be removed soon!
-void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTextures, TCluster_2D& _Level1Textures);
+void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster& _PlayerTextures, TCluster& _Level1Textures);
 //Function that safely removes from selected cluster
-void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index);
+void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index, const uint64_t _Subindex);
 }
 //TextureHandle [end]
 

@@ -24,3 +24,46 @@ INLINE void TCluster::animate_through_textures(const std::chrono::milliseconds _
 
 	return;
 };
+
+//
+INLINE std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster)
+{
+	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
+		return; //Error
+
+	return this->_ClusterOfTextures[_IndexOfSubcluster];
+
+};
+
+//
+INLINE const std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster) const
+{
+	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
+		return; //Error
+
+	return this->_ClusterOfTextures[_IndexOfSubcluster];
+};
+
+//
+INLINE SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture)
+{
+	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
+		return; //Error
+
+	if (_SubindexOfTexture < 0 || _SubindexOfTexture >= this->_ClusterOfTextures[_IndexOfSubcluster].size())
+		return; //Error
+
+	return this->_ClusterOfTextures[_IndexOfSubcluster][_SubindexOfTexture];
+};
+
+//
+INLINE const SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const
+{
+	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
+		return; //Error
+
+	if (_SubindexOfTexture < 0 || _SubindexOfTexture >= this->_ClusterOfTextures[_IndexOfSubcluster].size())
+		return; //Error
+
+	return this->_ClusterOfTextures[_IndexOfSubcluster][_SubindexOfTexture];
+};

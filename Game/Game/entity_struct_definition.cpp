@@ -5,13 +5,13 @@
 //
 INLINE void entity::load_basic_info(const std::string& _SpecificDB_Filename)
 {
-
+	
 };
 
-//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true
+//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 INLINE void entity::make_one_movement(void)
 {
-	if (!this->_IsMoving)
+	if (!this->_IsMoving || (!this->_IsAlive && !this->_IsImmortal))
 		return;
 
 	this->_Hitbox.x += _Vector[DX];
@@ -23,7 +23,7 @@ INLINE void entity::make_one_movement(void)
 //Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
 INLINE void entity::deal_damage_to(entity& _EntityToBeDamaged)
 {
-	if (_EntityToBeDamaged._Health == -1 || !_EntityToBeDamaged._IsAlive)
+	if (!_EntityToBeDamaged._IsImmortal || !_EntityToBeDamaged._IsAlive)
 		return;
 
 	_EntityToBeDamaged._Health < this->_Damage ?

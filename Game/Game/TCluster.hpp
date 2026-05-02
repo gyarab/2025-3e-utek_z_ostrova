@@ -16,6 +16,15 @@ public:
 	INLINE void mark_as_active(const uint64_t _IndexofElement);
 	//Animates the specified sub-cluster by changing the active texture periodically with delay usually resulting in movement
 	INLINE void animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
+	
+	//
+	INLINE std::vector<SDL_Texture*>& operator[](const uint64_t _IndexOfSubcluster);
+	//
+	INLINE const std::vector<SDL_Texture*>& operator[](const uint64_t _IndexOfSubcluster) const;
+	//
+	INLINE SDL_Texture* operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture);
+	//
+	INLINE const SDL_Texture* operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const;
 };
 
 #endif

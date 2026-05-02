@@ -64,9 +64,9 @@ void PutDefaultTexture(SDL_Renderer* const _TextureRenderer, SDL_Texture*& _Text
 };
 
 //Loads and prepares of the textures from image files based on the filenames specified in a db file and makes a 2D TCluster from them
-TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster)
+TCluster LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster)
 {
-	TCluster_2D ResultTextureClusters;
+	TCluster ResultTextures;
 	std::string GraphicsDir, TextureFormat, TextureFilename;
 	int64_t TextureScalingCoefficient = NULL;
 
@@ -78,27 +78,29 @@ TCluster_2D LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::strin
 	if (TexturesDB.fail())
 		RuntimeLog::Message(WARNING, "could not find/open texture file {\"" + _TexturesDB_Filename + "\"} => loading default textures instead");
 
+
+
 	for (uint64_t c = NULL; c < _TextureCount /*&& !TexturesDB.eof()*/; c++)
 	{
 		//Checks if new TCluster need to be created on this index and does it if needed
 		if (NumberIsInSet(c, _WhenCreateNewCluster))
-			ResultTextureClusters._Textures.push_back(TCluster());
+			ResultTextures._ClusterOfTextures.push_back(std::vector<SDL_Texture*>());
 
 		//Loads one file from the db file - there should be one valid texture filename
 		std::getline(TexturesDB, TextureFilename);
 		//makes texture from that file and adds to the TCluster - it may fail theres an invalid filename or the file is corrupted
-		ResultTextureClusters._Textures[ResultTextureClusters._Textures.size() - 1]._Textures.push_back(
+		ResultTextures[ResultTextures._ClusterOfTextures.size() - 1].push_back(
 			MakeScaledTextureFromPNG(_TextureRenderer, FullGraphicsDir + TextureFilename + "." + TextureFormat, TextureScalingCoefficient)
 		);
 	}
 
 	RuntimeLog::Message(INFO, "all {" + std::to_string(_TextureCount) + "} textures from {" + _TexturesDB_Filename + "} loaded successfully");
 
-	return ResultTextureClusters;
+	return ResultTextures;
 };
 
 //Function that loas the texture filenames from db files and call the function that loads them - this function may be removed soon!
-void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTextures, TCluster_2D& _Level1Textures)
+void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster& _PlayerTextures, TCluster& _Level1Textures)
 {
 	std::string PlayerTextures, Level1Textures;
 
@@ -112,10 +114,10 @@ void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster_2D& _Player
 };
 
 //Function that safely removes texture from selected cluster
-void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index)
+void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index, const uint64_t _Subindex)
 {
-	SDL_DestroyTexture(_TextureCluster._Textures[_Index]);
-	_TextureCluster._Textures.erase(_TextureCluster._Textures.begin() + _Index);
+	SDL_DestroyTexture(_TextureCluster(_Index, _Subindex));
+	_TextureCluster[_Index].erase(_TextureCluster[_Index].begin() + _Index);
 
 	return;
 };
