@@ -29,21 +29,23 @@ struct entity
 	uint64_t _Health;
 	//A non-negative number that tells how many hp can the entity take away from another entity [0 = no damage]
 	uint64_t _Damage;
-	//A non-negative number that tells how much will the entity move
-	uint64_t _Movespeed;
-	//A non-negative number that tells how high the entity will jump
-	uint64_t _JumpPower;
+	//A non-negative number that tells how much will the entity move on the X-axis
+	uint64_t _X_Movespeed;
+	//A non-negative number that tells how much will the entity move on the Y-axis
+	uint64_t _Y_Movespeed;
 
 	//All posible textures the entity can use to display itself
 	TCluster _Textures;
 
 public:
 	//
-	INLINE void load_basic_info(const std::string& _SpecificCFG_Filename);
+	void load_basic_info(const std::string& _SpecificCFG_Filename);
+	//Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
+	INLINE void copy_textures_to(entity& _AnotherEntity);
 	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 	INLINE void make_one_movement(void);
 	//Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-	INLINE void make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
+	void make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
 	//Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
 	INLINE void deal_damage_to(entity& _EntityToBeDamaged);
 	//Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa

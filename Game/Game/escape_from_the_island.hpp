@@ -36,6 +36,7 @@
 #include "TCluster.hpp"
 #include "entity.hpp"
 #include "ECluster.hpp"
+#include "user_events.hpp"
 #include "config_file_content_info.hpp"
 #include "error_messages_codes.hpp"
 
@@ -43,10 +44,18 @@
 using namespace std::string_literals;
 using namespace std::chrono_literals;
 
-//Make it more dynamic!
-//Default values for player's textures on screen
-#define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
-#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 127.0f * 4.0f //Temp!
+//Names of all types of entities that are present in this game - some have may have textures from the same db file
+enum EntitiesNames : uint64_t
+{
+	PLAYER = 0,
+	BACKGROUND = 1,
+	BACKGROUND_HITBOX = 2,
+	MENU_PANEL = 3,
+	MENU_BUTTONS = 4,
+	FLOATING_STONE = 5,
+	POISONED_ARROW = 6,
+	STONE = 7
+};
 
 //All types of messages that can be logged
 enum LogTypes : uint64_t
@@ -62,6 +71,12 @@ enum GameRenderersNames : uint64_t
 {
 	TEXTURE_RENDERER = 0
 };
+
+//----------------------------------------------------------------------------------
+//Make it more dynamic!
+//Default values for player's textures on screen
+#define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
+#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 127.0f * 4.0f //Temp!
 
 //Names for the indexes of 'PlayerAnimationTClusters' array defined in 'WinMain' function
 enum PlayerAnimationTClustersIndexes : uint64_t
@@ -80,6 +95,7 @@ enum Directions : uint64_t
 	UP = 2,
 	DOWN = 3
 };
+//----------------------------------------------------------------------------------
 
 namespace WindowRenderHandle //[start]
 {
@@ -92,25 +108,40 @@ void DestroyRenderers(WRCluster& _WindowAndRenderers);
 //Destroys graphical window and renderers
 void DestroyWindowWithRenderers(WRCluster& _WindowAndRenderers);
 //Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
-void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer);
+void SetFrameDefaultColorToBlack(WRCluster& _WindowAndRenderers, const uint64_t _IndexOfFrameRenderer);
 }
 //WindowRenderHandle [end]
 
 namespace TextureHandle //[start]
 {
 //Loads and prepares of the textures from image files based on the filenames specified in a db file and makes a 2D TCluster from them
-TCluster LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename, const uint64_t _TextureCount, const std::set<uint64_t>& _WhenCreateNewCluster);
+TCluster LoadFromFiles(SDL_Renderer* const _TextureRenderer, const std::string& _TexturesDB_Filename);
 //Function that loas the texture filenames from db files and call the function that loads them - this function may be removed soon!
-void PrepareAllNeeded(SDL_Renderer* const _TextureRenderer, TCluster& _PlayerTextures, TCluster& _Level1Textures);
+void PrepareForAllEntities(WRCluster& _MainWindow, ECluster& _AllEntities);
 //Function that safely removes from selected cluster
 void SafelyRemoveTextureFromCluster(TCluster& _TextureCluster, const uint64_t _Index, const uint64_t _Subindex);
 }
 //TextureHandle [end]
 
+namespace EntityBulkInitHandle //[start]
+{
+//Prepares all entites and puts them into the specified ECluster based on the config in the "config.ini" file
+void PrepareECluster(ECluster& _Entities);
+}
+//EntityBulkInitHandle [end]
+
+namespace GameConditions //[start]
+{
+
+
+
+}
+//GameConditions [end]
+
 namespace GameLoopThread //[start]
 {
 //Loop for processing user events and rendering the game - runs on 'Main thread'
-void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTClusters, TCluster& _BackgroundTCluster);
+void MainLoop(WRCluster& MainWindow, ECluster& _AllEntities);
 }
 //GameLoopThread [end]
 

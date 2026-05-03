@@ -41,7 +41,7 @@ void CreateNewRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfR
 	return;
 };
 
-//Initialize graphical window and a specified amount of renderers [default amount of renderers is 1]
+//Initialize graphical window and a specified amount of renderers [default amount of renderers is 1] - should be called right after creating new WRCluster
 void CreateNewWindowWithRenderers(WRCluster& _WindowAndRenderers, const uint64_t _CountOfRenderers)
 {
 	std::string WindowTitle;
@@ -100,9 +100,9 @@ void DestroyWindowWithRenderers(WRCluster& _WindowAndRenderers)
 };
 
 //Sets the color that will be used that the beginning of every frame to black - should be called only once at the beginning of program
-void SetFrameDefaultColorToBlack(SDL_Renderer* const _FrameRenderer)
+void SetFrameDefaultColorToBlack(WRCluster& _WindowAndRenderers, const uint64_t _IndexOfFrameRenderer)
 {
-	SDL_SetRenderDrawColor(_FrameRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_SetRenderDrawColor(_WindowAndRenderers._Renderers[_IndexOfFrameRenderer], 0, 0, 0, SDL_ALPHA_OPAQUE);
 
 	return;
 };

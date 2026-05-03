@@ -1,11 +1,83 @@
 #include "escape_from_the_island.hpp"
 
-//-----<entity>-----
-
-//
-INLINE void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
+//Function that loads the basic info from config file on how entities should be processed
+static INLINE void LoadBasicEntitiesProps(std::string& _AssetConfigDir, int64_t& _ScalingCoefficient)
 {
-	
+	ConfigFile::ReadValue(BUNDLE_AppAssetConfig, SELECTOR_tAssetConfigDir, _AssetConfigDir);
+	ConfigFile::ReadValue(BUNDLE_AppWindowConfig, SELECTOR_ScalingCoefficient, _ScalingCoefficient);
+
+	return;
+};
+
+//Takes string that should contain exactly 4 numbers separated with commas, extracts them and forms a hitbox from them
+static SDL_FRect MakeHitboxFromCommaSeparatedString(const std::string& _BaseString)
+{
+	SDL_FRect ResultHitBox = SDL_FRect();
+	std::stringstream BaseStringStream(_BaseString);
+	std::array<uint64_t, 4> ResultNumbers = {}; //Exactly 4 numbers
+	std::string OneNumber;
+
+	for (uint64_t c  = NULL; c < ResultNumbers.size(); c++)
+	{
+		std::getline(BaseStringStream, OneNumber, ',');
+		ResultNumbers[c] = std::stoull(OneNumber);
+	}
+
+	//Assing these number to correct places in the hitbox
+	ResultHitBox.x = ResultNumbers[0];
+	ResultHitBox.y = ResultNumbers[1];
+	ResultHitBox.w = ResultNumbers[2];
+	ResultHitBox.h = ResultNumbers[3];
+
+	return ResultHitBox;
+};
+
+//-----<entity>-----vv
+
+//Function that loads a specific config file and puts basic values for the entity - should be called right after creating new entity
+void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
+{
+	std::string AssetConfigDir, OneLine;
+	int64_t ScalingCoefficient = NULL;
+	std::array<uint64_t, 5> ResultNumbers = {}; //Exactly 5 numbers
+
+	LoadBasicEntitiesProps(AssetConfigDir, ScalingCoefficient);
+
+	const std::string FullAssetConfigDir = SDL_GetBasePath() + AssetConfigDir + "\\";
+	std::fstream EntityCFG(FullAssetConfigDir + _SpecificCFG_Filename, std::ios::in);
+
+	std::getline(EntityCFG, OneLine);
+	this->_Hitbox = MakeHitboxFromCommaSeparatedString(OneLine);
+
+	for (uint64_t c = NULL; c < ResultNumbers.size(); c++)
+	{
+		std::getline(EntityCFG, OneLine);
+		ResultNumbers[c] = std::stoull(OneLine);
+	}
+
+	this->_IsImmortal = (ResultNumbers[0] == 1);
+	this->_Health = ResultNumbers[1];
+	this->_Damage = ResultNumbers[2];
+	this->_X_Movespeed = ScalingCoefficient * ResultNumbers[3];
+	this->_Y_Movespeed = ScalingCoefficient * ResultNumbers[4];
+
+	this->_Vector[DX] = NULL;
+	this->_Vector[DY] = NULL;
+	this->_IsMoving = false;
+	this->_IsAlive = (this->_Health > 0);
+
+	this->_Textures = TCluster(); //
+
+	return;
+};
+
+//Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
+INLINE void entity::copy_textures_to(entity& _AnotherEntity)
+{
+	//Copy using copy operator=
+	_AnotherEntity._Textures = this->_Textures;
+
+	return;
 };
 
 //Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
@@ -21,7 +93,7 @@ INLINE void entity::make_one_movement(void)
 };
 
 //Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-INLINE void entity::make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr)
+void entity::make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr)
 {
 	for (uint64_t c = NULL; c < this->_Textures._ActiveSubcluster->size(); c++)
 	{
@@ -75,9 +147,9 @@ INLINE bool operator<=>(entity& _Left, entity& _Right)
 	_Left.hitbox_is_touching_hitbox_of(_Right);
 };
 
-//-----<entity>-----
+//-----<entity>-----^^
 
-//-----<ECluster>-----
+//-----<ECluster>-----vv
 
 //
 INLINE entity& ECluster::operator[](const uint64_t _IndexOfEntity)
@@ -97,4 +169,4 @@ INLINE const entity& ECluster::operator[](const uint64_t _IndexOfEntity) const
 	return this->_ClusterOfEntities[_IndexOfEntity];
 };
 
-//-----<ECluster>-----
+//-----<ECluster>-----^^

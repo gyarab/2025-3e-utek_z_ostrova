@@ -86,7 +86,7 @@ namespace GameLoopThread //[start]
 {
 
 //Loop for processing user events and rendering the game - runs on 'Main thread'
-void MainLoop(SDL_Renderer* const _TextureRenderer, TCluster_2D& _PlayerTClusters, TCluster& _BackgroundTCluster)
+void MainLoop(WRCluster& MainWindow, ECluster& _AllEntities)
 {
 	//Mutex to safely operate with critical sector of 'MainThread'
 	std::mutex MutexForMainThread;

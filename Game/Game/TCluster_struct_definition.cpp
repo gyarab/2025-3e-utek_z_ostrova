@@ -25,6 +25,12 @@ INLINE void TCluster::animate_through_textures(const std::chrono::milliseconds _
 	return;
 };
 
+//Verifies if the main container [_ClusterOfTextures] is empty => the whole TCluster should be empty
+INLINE bool TCluster::is_empty(void)
+{
+	return (this->_ClusterOfTextures.size() == 0);
+};
+
 //
 INLINE std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster)
 {
