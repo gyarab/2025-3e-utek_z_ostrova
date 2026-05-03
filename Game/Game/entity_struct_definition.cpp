@@ -20,21 +20,6 @@ INLINE void entity::make_one_movement(void)
 	return;
 };
 
-//Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-INLINE void entity::make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr)
-{
-	for (uint64_t c = NULL; c < this->_Textures._ActiveSubcluster->size(); c++)
-	{
-		this->make_one_movement();
-		_OptionalThreadMutex->lock();
-		this->_Textures._ActiveTexture = (this->_Textures._ActiveSubcluster->data() + c);
-		_OptionalThreadMutex->unlock();
-		std::this_thread::sleep_for(_TextureUpdateDelay);
-	}
-
-	return;
-};
-
 //Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
 INLINE void entity::deal_damage_to(entity& _EntityToBeDamaged)
 {
@@ -51,20 +36,19 @@ INLINE void entity::deal_damage_to(entity& _EntityToBeDamaged)
 	return;
 };
 
-//Redo!
 //Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
 INLINE bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 {
 	return
 		(
 			(this->_Hitbox.x >= _AnotherEntity._Hitbox.x && this->_Hitbox.x <= _AnotherEntity._Hitbox.x + _AnotherEntity._Hitbox.w)
-			&&
+			||
 			(this->_Hitbox.y >= _AnotherEntity._Hitbox.y && this->_Hitbox.y <= _AnotherEntity._Hitbox.y + _AnotherEntity._Hitbox.h)
 		)
 		||
 		(
 			(_AnotherEntity._Hitbox.x >= this->_Hitbox.x && _AnotherEntity._Hitbox.x <= this->_Hitbox.x + this->_Hitbox.w)
-			&&
+			||
 			(_AnotherEntity._Hitbox.y >= this->_Hitbox.y && _AnotherEntity._Hitbox.y <= this->_Hitbox.y + this->_Hitbox.h)
 		);
 };
