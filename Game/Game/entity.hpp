@@ -26,12 +26,12 @@ struct entity
 	//Bool that tells whether the entity is immortal or not
 	bool _IsImmortal;
 	//A non-negative number that tells how many hp does the entity have [0 = dead]
-	int64_t _Health;
+	uint64_t _Health;
 	//A non-negative number that tells how many hp can the entity take away from another entity [0 = no damage]
-	int64_t _Damage;
-	//Number that tells how much will the entity move
+	uint64_t _Damage;
+	//A non-negative number that tells how much will the entity move
 	uint64_t _Movespeed;
-	//Number that tells how high the entity will jump
+	//A non-negative number that tells how high the entity will jump
 	uint64_t _JumpPower;
 
 	//All posible textures the entity can use to display itself
@@ -39,7 +39,7 @@ struct entity
 
 public:
 	//
-	INLINE void load_basic_info(const std::string& _SpecificDB_Filename);
+	INLINE void load_basic_info(const std::string& _SpecificCFG_Filename);
 	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 	INLINE void make_one_movement(void);
 	//Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal

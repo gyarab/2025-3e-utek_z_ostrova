@@ -3,7 +3,7 @@
 //-----<entity>-----
 
 //
-INLINE void entity::load_basic_info(const std::string& _SpecificDB_Filename)
+INLINE void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
 {
 	
 };
