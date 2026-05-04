@@ -71,6 +71,50 @@ void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
 	return;
 };
 
+//Function that sets the vector x direction to left by multipling X_Movespeed by -1
+INLINE void entity::set_vector_direction_to_left(void)
+{
+	this->_Vector[DX] = -1 * this->_X_Movespeed;
+
+	return;
+};
+
+//Function that sets the vector x direction to right by multipling X_Movespeed by 1
+INLINE void entity::set_vector_direction_to_right(void)
+{
+	this->_Vector[DX] = 1 * this->_X_Movespeed;
+	
+	return;
+};
+
+//Function that sets the vector y direction to up by multipling Y_Movespeed by -1
+INLINE void entity::set_vector_direction_to_up(void)
+{
+	this->_Vector[DY] = -1 * this->_Y_Movespeed;
+
+	return;
+};
+
+//Function that sets the vector y direction to down by multipling Y_Movespeed by 1
+INLINE void entity::set_vector_direction_to_down(void)
+{
+	this->_Vector[DY] = 1 * this->_Y_Movespeed;
+
+	return;
+};
+
+//Function that tells the vector x direction my dividing it by X_Movespeed [0 = no direction ; -1 = left ; 1 = right]
+INLINE int64_t entity::tell_vector_x_direction(void)
+{
+	return (this->_Vector[DX] / this->_X_Movespeed);
+};
+
+//Function that tells the vector y direction my dividing it by Y_Movespeed [0 = no direction ; -1 = up ; 1 = down]
+INLINE int64_t entity::tell_vector_y_direction(void)
+{
+	return (this->_Vector[DY] / this->_Y_Movespeed);
+};
+
 //Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
 INLINE void entity::copy_textures_to(entity& _AnotherEntity)
 {

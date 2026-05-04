@@ -40,6 +40,18 @@ struct entity
 public:
 	//Function that loads the basic info from config file on how entities should be processed
 	void load_basic_info(const std::string& _SpecificCFG_Filename);
+	//Function that sets the vector x direction to left by multipling X_Movespeed by -1
+	INLINE void set_vector_direction_to_left(void);
+	//Function that sets the vector x direction to right by multipling X_Movespeed by 1
+	INLINE void set_vector_direction_to_right(void);
+	//Function that sets the vector y direction to up by multipling Y_Movespeed by -1
+	INLINE void set_vector_direction_to_up(void);
+	//Function that sets the vector y direction to down by multipling Y_Movespeed by 1
+	INLINE void set_vector_direction_to_down(void);
+	//Function that tells the vector x direction my dividing it by X_Movespeed [0 = no direction ; -1 = left ; 1 = right]
+	INLINE int64_t tell_vector_x_direction(void);
+	//Function that tells the vector y direction my dividing it by Y_Movespeed [0 = no direction ; -1 = up ; 1 = down]
+	INLINE int64_t tell_vector_y_direction(void);
 	//Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
 	INLINE void copy_textures_to(entity& _AnotherEntity);
 	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
