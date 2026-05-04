@@ -30,9 +30,9 @@ struct entity
 	//A non-negative number that tells how many hp can the entity take away from another entity [0 = no damage]
 	uint64_t _Damage = NULL;
 	//A non-negative number that tells how much will the entity move on the X-axis
-	uint64_t _X_Movespeed = NULL;
+	int64_t _X_Movespeed = NULL;
 	//A non-negative number that tells how much will the entity move on the Y-axis
-	uint64_t _Y_Movespeed = NULL;
+	int64_t _Y_Movespeed = NULL;
 
 	//All posible textures the entity can use to display itself
 	TCluster _Textures = TCluster();
