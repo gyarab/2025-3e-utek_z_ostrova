@@ -36,7 +36,7 @@ void MainLoop(WRCluster& _MainWindow, ECluster& _AllEntities, user_events& _AllU
 
 	RuntimeLog::Message(INFO, "game loop started => logging disabled");
 
-	//Temp!
+	//Temp -> make better!
 	_AllEntities[PLAYER]._Textures.mark_as_active(0);
 	_AllEntities[BACKGROUND]._Textures.mark_as_active(0);
 

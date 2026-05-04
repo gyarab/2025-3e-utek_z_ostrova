@@ -1,6 +1,47 @@
 #include "escape_from_the_island.hpp"
 
-//polls recently made events and interprets them by conditions as mostly bools or numbers that could be used to alter the game status later on
+//Function that sets the status of the lastly triggered key to either - pressed [true] or released [false]
+static INLINE void SetTheTriggeredKeysTo(user_events* _UserEventContainer, const bool _IsPressed)
+{
+	if (_UserEventContainer->_CurrentUserEvents.key.scancode == SDL_SCANCODE_ESCAPE)
+	{
+		_UserEventContainer->_ESC_KeyPressed = _IsPressed;
+
+		return;
+	}
+
+	if (_UserEventContainer->_CurrentUserEvents.key.scancode == SDL_SCANCODE_W)
+	{
+		_UserEventContainer->_W_KeyPressed = _IsPressed;
+
+		return;
+	}
+
+	if (_UserEventContainer->_CurrentUserEvents.key.scancode == SDL_SCANCODE_A)
+	{
+		_UserEventContainer->_A_KeyPressed = _IsPressed;
+
+		return;
+	}
+
+	if (_UserEventContainer->_CurrentUserEvents.key.scancode == SDL_SCANCODE_S)
+	{
+		_UserEventContainer->_S_KeyPressed = _IsPressed;
+
+		return;
+	}
+
+	if (_UserEventContainer->_CurrentUserEvents.key.scancode == SDL_SCANCODE_D)
+	{
+		_UserEventContainer->_D_KeyPressed = _IsPressed;
+
+		return;
+	}
+
+	return;
+};
+
+//Polls recently made events and interprets them by conditions as mostly bools or numbers that could be used to alter the game status later on
 INLINE void user_events::collect_recent_events(void)
 {
 	//Get event poll and process it
@@ -23,22 +64,14 @@ INLINE void user_events::collect_recent_events(void)
 
 	if (this->_CurrentUserEvents.type == SDL_EVENT_KEY_DOWN)
 	{
-		this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_ESCAPE ?	this->_ESC_KeyPressed = true :
-			this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_W ?		this->_W_KeyPressed = true :
-				this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_A ?		this->_A_KeyPressed = true :
-					this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_S ?		this->_S_KeyPressed = true :
-						this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_D ?		this->_D_KeyPressed = true : NULL;
-			
+		SetTheTriggeredKeysTo(this, true);
+
 		return;
 	}
 
 	if (this->_CurrentUserEvents.type == SDL_EVENT_KEY_UP)
 	{
-		this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_ESCAPE ?	this->_ESC_KeyPressed = false :
-			this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_W ?		this->_W_KeyPressed = false :
-				this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_A ?		this->_A_KeyPressed = false :
-					this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_S ?		this->_S_KeyPressed = false :
-						this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_D ?		this->_D_KeyPressed = false : NULL;
+		SetTheTriggeredKeysTo(this, false);
 
 		return;
 	}

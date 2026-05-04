@@ -38,7 +38,7 @@ struct entity
 	TCluster _Textures = TCluster();
 
 public:
-	//
+	//Function that loads the basic info from config file on how entities should be processed
 	void load_basic_info(const std::string& _SpecificCFG_Filename);
 	//Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
 	INLINE void copy_textures_to(entity& _AnotherEntity);
