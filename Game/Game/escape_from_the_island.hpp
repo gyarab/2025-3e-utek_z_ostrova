@@ -4,8 +4,6 @@
 //Current game version: 1.1.0.0
 
 //Accelerate rendering on GPU!
-//Add better app/game icon!
-//Everything needs to be scaled even the coords and movespeed!
 
 //Standard C++ lib - some yet unused
 #include <iostream>
@@ -44,26 +42,13 @@
 using namespace std::string_literals;
 using namespace std::chrono_literals;
 
-//Names of all types of entities that are present in this game - some have may have textures from the same db file
-enum EntitiesNames : uint64_t
-{
-	PLAYER = 0,
-	BACKGROUND = 1,
-	BACKGROUND_HITBOX = 2,
-	MENU_PANEL = 3,
-	MENU_BUTTONS = 4,
-	FLOATING_STONE = 5,
-	POISONED_ARROW = 6,
-	STONE = 7
-};
-
 //All types of messages that can be logged
 enum LogTypes : uint64_t
 {
-	INFO = 0,
+	INFO	= 0,
 	WARNING = 1,
-	ERROR = 2,
-	CRASH = 3
+	ERROR	= 2,
+	CRASH	= 3
 };
 
 //Names for the indexes for all game renderers defined in 'WRCluster' in 'WinMain' function
@@ -72,31 +57,27 @@ enum GameRenderersNames : uint64_t
 	TEXTURE_RENDERER = 0
 };
 
-#if 0
-//Make it more dynamic!
-//Default values for player's textures on screen
-#define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
-#define ENTITY_PLAYER_DEFAULT_SCREEN_POSITION 127.0f * 4.0f //Temp!
-
-//Names for the indexes of 'PlayerAnimationTClusters' array defined in 'WinMain' function
-enum PlayerAnimationTClustersIndexes : uint64_t
+//Names of all types of entities that are present in this game - some have may have textures from the same db file
+enum EntitiesNames : uint64_t
 {
-	RUNNING_FACING_LEFT = 0,
-	RUNNING_FACING_RIGHT = 1,
-	STANDING_FACING_LEFT = 2,
-	STANDING_FACING_RIGHT = 3
+	PLAYER				= 0,
+	BACKGROUND			= 1,
+	BACKGROUND_HITBOX	= 2,
+	MENU_PANEL			= 3,
+	MENU_BUTTONS		= 4,
+	FLOATING_STONE		= 5,
+	POISONED_ARROW		= 6,
+	STONE				= 7
 };
 
-//All possible direction that entity can face
-enum Directions : uint64_t
+//Names for the indexes of the subclusters of PlayerTextureCluster 
+enum PlayerTextureSubclustersIndexes : uint64_t
 {
-	LEFT = 0,
-	RIGHT = 1,
-	UP = 2,
-	DOWN = 3
+	MOVING_LEFT		= 0,
+	MOVING_RIGHT	= 1,
+	STANDING_LEFT	= 2,
+	STANDING_RIGHT	= 3
 };
-//----------------------------------------------------------------------------------
-#endif
 
 namespace WindowRenderHandle //[start]
 {
