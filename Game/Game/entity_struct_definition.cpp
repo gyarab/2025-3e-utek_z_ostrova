@@ -14,13 +14,13 @@ static SDL_FRect MakeHitboxFromCommaSeparatedString(const std::string& _BaseStri
 {
 	SDL_FRect ResultHitBox = SDL_FRect();
 	std::stringstream BaseStringStream(_BaseString);
-	std::array<uint64_t, 4> ResultNumbers = {}; //Exactly 4 numbers
+	std::array<float, 4> ResultNumbers = {}; //Exactly 4 numbers
 	std::string OneNumber;
 
 	for (uint64_t c = NULL; c < ResultNumbers.size(); c++)
 	{
 		std::getline(BaseStringStream, OneNumber, ',');
-		ResultNumbers[c] = _ScalingCoefficient * std::stoull(OneNumber);
+		ResultNumbers[c] = (float)_ScalingCoefficient * std::stof(OneNumber);
 	}
 
 	//Assing these number to correct places in the hitbox

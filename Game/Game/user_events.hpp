@@ -13,8 +13,8 @@ struct user_events
 	//User pressed the X button on the game windows
 	bool _ShutdownRequested = false;
 	//Mouse events
-	uint64_t _MouseX = NULL;
-	uint64_t _MouseY = NULL;
+	float _MouseX = 0.0f;
+	float _MouseY = 0.0f;
 	bool _LeftButtonSingleClick = false;
 	//Keyboard events
 	bool _ESC_KeyPressed = false;
