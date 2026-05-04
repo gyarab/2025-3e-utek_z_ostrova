@@ -21,20 +21,27 @@ INLINE void user_events::collect_recent_events(void)
 	this->_LeftButtonSingleClick =
 		(this->_CurrentUserEvents.button.button == SDL_BUTTON_LEFT && this->_CurrentUserEvents.button.clicks == 1);
 
-	this->_ESC_KeyPressed =
-		(this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_ESCAPE && this->_CurrentUserEvents.key.down);
+	if (this->_CurrentUserEvents.type == SDL_EVENT_KEY_DOWN)
+	{
+		this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_ESCAPE ?	this->_ESC_KeyPressed = true :
+			this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_W ?		this->_W_KeyPressed = true :
+				this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_A ?		this->_A_KeyPressed = true :
+					this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_S ?		this->_S_KeyPressed = true :
+						this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_D ?		this->_D_KeyPressed = true : NULL;
+			
+		return;
+	}
 
-	this->_W_KeyPressed =
-		(this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_W && this->_CurrentUserEvents.key.down);
+	if (this->_CurrentUserEvents.type == SDL_EVENT_KEY_UP)
+	{
+		this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_ESCAPE ?	this->_ESC_KeyPressed = false :
+			this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_W ?		this->_W_KeyPressed = false :
+				this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_A ?		this->_A_KeyPressed = false :
+					this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_S ?		this->_S_KeyPressed = false :
+						this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_D ?		this->_D_KeyPressed = false : NULL;
 
-	this->_A_KeyPressed =
-		(this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_A && this->_CurrentUserEvents.key.down);
-
-	this->_S_KeyPressed =
-		(this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_S && this->_CurrentUserEvents.key.down);
-
-	this->_D_KeyPressed =
-		(this->_CurrentUserEvents.key.scancode == SDL_SCANCODE_D && this->_CurrentUserEvents.key.down);
+		return;
+	}
 
 	return;
 };
