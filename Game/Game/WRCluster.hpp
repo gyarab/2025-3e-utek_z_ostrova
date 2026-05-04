@@ -8,7 +8,7 @@
 //Dynamic cluster that should hold one window and its own corresponding renderer/s
 struct WRCluster
 {
-	SDL_Window* _Window;
+	SDL_Window* _Window = nullptr;
 	std::vector<SDL_Renderer*> _Renderers;
 };
 

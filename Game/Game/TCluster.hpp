@@ -10,9 +10,9 @@ struct TCluster
 	//Main container that hold all the textures in separated arrays usually of similiar ones
 	std::vector<std::vector<SDL_Texture*>> _ClusterOfTextures;
 	//Pointer that holds address to one specific array of textures from the main container
-	std::vector<SDL_Texture*>* _ActiveSubcluster;
+	std::vector<SDL_Texture*>* _ActiveSubcluster = nullptr;
 	//Pointer that holds address to one specific texture from the active array
-	SDL_Texture** _ActiveTexture;
+	SDL_Texture** _ActiveTexture = nullptr;
 
 public:
 	//Mark specifis sub-cluster [should be textures related to same action] of textures as active

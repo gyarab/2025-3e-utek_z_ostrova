@@ -12,7 +12,7 @@ INLINE void TCluster::mark_as_active(const uint64_t _IndexofElement)
 };
 
 //Animates the specified sub-cluster by changing the active texture periodically with delay usually resulting in movement
-INLINE void TCluster::animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr)
+INLINE void TCluster::animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex)
 {
 	for (uint64_t c = NULL; c < this->_ActiveSubcluster->size(); c++)
 	{
@@ -35,7 +35,7 @@ INLINE bool TCluster::is_empty(void)
 INLINE std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster)
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
-		return; //Error
+		std::exit(-1); //Error
 
 	return this->_ClusterOfTextures[_IndexOfSubcluster];
 
@@ -45,7 +45,7 @@ INLINE std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSu
 INLINE const std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster) const
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
-		return; //Error
+		std::exit(-1); //Error
 
 	return this->_ClusterOfTextures[_IndexOfSubcluster];
 };
@@ -54,10 +54,10 @@ INLINE const std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _Ind
 INLINE SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture)
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
-		return; //Error
+		std::exit(-1); //Error
 
 	if (_SubindexOfTexture < 0 || _SubindexOfTexture >= this->_ClusterOfTextures[_IndexOfSubcluster].size())
-		return; //Error
+		std::exit(-1); //Error
 
 	return this->_ClusterOfTextures[_IndexOfSubcluster][_SubindexOfTexture];
 };
@@ -66,10 +66,10 @@ INLINE SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, cons
 INLINE const SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
-		return; //Error
+		std::exit(-1); //Error
 
 	if (_SubindexOfTexture < 0 || _SubindexOfTexture >= this->_ClusterOfTextures[_IndexOfSubcluster].size())
-		return; //Error
+		std::exit(-1); //Error
 
 	return this->_ClusterOfTextures[_IndexOfSubcluster][_SubindexOfTexture];
 };

@@ -17,6 +17,8 @@ int WinMain(int argc, char** argv)
 	WRCluster MainWindow;
 	//Initialize all entities, their props and textures variables
 	ECluster AllEntities;
+	//Initialize container for user events
+	user_events AllUserEvents;
 	
 	//Prepare window and renderer for game loop
 	WindowRenderHandle::CreateNewWindowWithRenderers(MainWindow);
@@ -27,7 +29,7 @@ int WinMain(int argc, char** argv)
 	//Prepare textures
 	TextureHandle::PrepareForAllEntities(MainWindow, AllEntities);
 	//Game starts
-	GameLoopThread::MainLoop(MainWindow._Renderers[TEXTURE_RENDERER], PlayerTClusters, Level1TClusters._Textures[0]);
+	GameLoopThread::MainLoop(MainWindow, AllEntities, AllUserEvents);
 	//Destroy game window and renderer before closing program
 	WindowRenderHandle::DestroyWindowWithRenderers(MainWindow);
 

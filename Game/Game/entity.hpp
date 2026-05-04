@@ -15,27 +15,27 @@ enum EntityVectorIndexes
 struct entity
 {
 	//Two numbers [_Vector[0] = dx ; _Vector[1] = dy] defining the direction which the entity will be facing / moving into usually related to movespeed and jump power
-	int64_t _Vector[2];
+	int64_t _Vector[2] = { NULL, NULL };
 	//Bool that tells if the entity is in the moving state
-	bool _IsMoving;
+	bool _IsMoving = false;
 	//Bool that tells whether the entity is alive [hp > 0] or not
-	bool _IsAlive;
+	bool _IsAlive = false;
 	
 	//Rectange defining both position and size of the entity [not its texture directly]
-	SDL_FRect _Hitbox;
+	SDL_FRect _Hitbox = SDL_FRect();
 	//Bool that tells whether the entity is immortal or not
-	bool _IsImmortal;
+	bool _IsImmortal = false;
 	//A non-negative number that tells how many hp does the entity have [0 = dead]
-	uint64_t _Health;
+	uint64_t _Health = NULL;
 	//A non-negative number that tells how many hp can the entity take away from another entity [0 = no damage]
-	uint64_t _Damage;
+	uint64_t _Damage = NULL;
 	//A non-negative number that tells how much will the entity move on the X-axis
-	uint64_t _X_Movespeed;
+	uint64_t _X_Movespeed = NULL;
 	//A non-negative number that tells how much will the entity move on the Y-axis
-	uint64_t _Y_Movespeed;
+	uint64_t _Y_Movespeed = NULL;
 
 	//All posible textures the entity can use to display itself
-	TCluster _Textures;
+	TCluster _Textures = TCluster();
 
 public:
 	//

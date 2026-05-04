@@ -1,7 +1,7 @@
 #ifndef ESCAPE_FROM_THE_ISLAND
 #define ESCAPE_FROM_THE_ISLAND
 
-//Current game version: 1.0.0.0
+//Current game version: 1.1.0.0
 
 //Accelerate rendering on GPU!
 //Add better app/game icon!
@@ -66,13 +66,13 @@ enum LogTypes : uint64_t
 	CRASH = 3
 };
 
-//Names for the indexes for all game renderers defined in 'RCluster' in 'WinMain' function
+//Names for the indexes for all game renderers defined in 'WRCluster' in 'WinMain' function
 enum GameRenderersNames : uint64_t
 {
 	TEXTURE_RENDERER = 0
 };
 
-//----------------------------------------------------------------------------------
+#if 0
 //Make it more dynamic!
 //Default values for player's textures on screen
 #define ENTITY_PLAYER_DEFAULT_SIZE 32.0f
@@ -96,6 +96,7 @@ enum Directions : uint64_t
 	DOWN = 3
 };
 //----------------------------------------------------------------------------------
+#endif
 
 namespace WindowRenderHandle //[start]
 {
@@ -141,23 +142,21 @@ namespace GameConditions //[start]
 namespace GameLoopThread //[start]
 {
 //Loop for processing user events and rendering the game - runs on 'Main thread'
-void MainLoop(WRCluster& MainWindow, ECluster& _AllEntities);
+void MainLoop(WRCluster& _MainWindow, ECluster& _AllEntities, user_events& _AllUserEvents);
 }
 //GameLoopThread [end]
 
 namespace PlayerThread //[start]
 {
-//Function used to initialize Entity container for player with 'default' values
-Entity PutDefaultValues(void);
 //Thread that makes player move by changing its horizontal coords and animating its textures
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const std::chrono::milliseconds _TextureUpdateDelay, Entity* const _Player, std::atomic_bool* const _ThreadShouldFinish);
+void Main(entity* _Player, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
 }
 //PlayerThread [end]
 
 namespace BackgroundThread //[start]
 {
 //Thread that animates the water on the background by animating its textures
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
+void Main(entity* _Background, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
 };
 //BackgroundThread [end]
 

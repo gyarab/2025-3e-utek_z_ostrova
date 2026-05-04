@@ -21,7 +21,7 @@ static INLINE void LoadBasicTextureProps(std::string& _GraphicsDir, std::string&
 };
 
 //Function that loads the info about the 4 db files with textures config
-static void LoadTextureDB_FilesPropsIntoOneArray(std::array<std::string, 4> _AllDB_Filenames)
+static void LoadTextureDB_FilesPropsIntoOneArray(std::array<std::string, 4>& _AllDB_Filenames)
 {
 	std::string Selectors[4] =
 	{

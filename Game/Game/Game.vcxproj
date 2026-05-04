@@ -160,6 +160,7 @@
     <ClCompile Include="runtime_log.cpp" />
     <ClCompile Include="TCluster_struct_definition.cpp" />
     <ClCompile Include="texture_handle.cpp" />
+    <ClCompile Include="user_events_struct_definition.cpp" />
     <ClCompile Include="window_render_handle.cpp" />
   </ItemGroup>
   <ItemGroup>

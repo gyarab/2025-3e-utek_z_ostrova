@@ -9,18 +9,18 @@ static INLINE void LoadBasicEntitiesProps(std::string& _AssetConfigDir, int64_t&
 	return;
 };
 
-//Takes string that should contain exactly 4 numbers separated with commas, extracts them and forms a hitbox from them
-static SDL_FRect MakeHitboxFromCommaSeparatedString(const std::string& _BaseString)
+//Takes string that should contain exactly 4 numbers separated with commas, extracts them and forms a hitbox from them + scales it with the scaling coefficient
+static SDL_FRect MakeHitboxFromCommaSeparatedString(const std::string& _BaseString, const int64_t _ScalingCoefficient)
 {
 	SDL_FRect ResultHitBox = SDL_FRect();
 	std::stringstream BaseStringStream(_BaseString);
 	std::array<uint64_t, 4> ResultNumbers = {}; //Exactly 4 numbers
 	std::string OneNumber;
 
-	for (uint64_t c  = NULL; c < ResultNumbers.size(); c++)
+	for (uint64_t c = NULL; c < ResultNumbers.size(); c++)
 	{
 		std::getline(BaseStringStream, OneNumber, ',');
-		ResultNumbers[c] = std::stoull(OneNumber);
+		ResultNumbers[c] = _ScalingCoefficient * std::stoull(OneNumber);
 	}
 
 	//Assing these number to correct places in the hitbox
@@ -47,7 +47,7 @@ void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
 	std::fstream EntityCFG(FullAssetConfigDir + _SpecificCFG_Filename, std::ios::in);
 
 	std::getline(EntityCFG, OneLine);
-	this->_Hitbox = MakeHitboxFromCommaSeparatedString(OneLine);
+	this->_Hitbox = MakeHitboxFromCommaSeparatedString(OneLine, ScalingCoefficient);
 
 	for (uint64_t c = NULL; c < ResultNumbers.size(); c++)
 	{
@@ -93,7 +93,7 @@ INLINE void entity::make_one_movement(void)
 };
 
 //Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-void entity::make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr)
+void entity::make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex)
 {
 	for (uint64_t c = NULL; c < this->_Textures._ActiveSubcluster->size(); c++)
 	{
@@ -144,7 +144,7 @@ INLINE bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 //Operator for function "hitbox_is_inside_another_hitbox_of"
 INLINE bool operator<=>(entity& _Left, entity& _Right)
 {
-	_Left.hitbox_is_touching_hitbox_of(_Right);
+	return _Left.hitbox_is_touching_hitbox_of(_Right);
 };
 
 //-----<entity>-----^^
@@ -155,7 +155,7 @@ INLINE bool operator<=>(entity& _Left, entity& _Right)
 INLINE entity& ECluster::operator[](const uint64_t _IndexOfEntity)
 {
 	if (_IndexOfEntity < 0 || _IndexOfEntity >= this->_ClusterOfEntities.size())
-		return; //Error
+		std::exit(-1); //Error
 
 	return this->_ClusterOfEntities[_IndexOfEntity];
 };
@@ -164,7 +164,7 @@ INLINE entity& ECluster::operator[](const uint64_t _IndexOfEntity)
 INLINE const entity& ECluster::operator[](const uint64_t _IndexOfEntity) const
 {
 	if (_IndexOfEntity < 0 || _IndexOfEntity >= this->_ClusterOfEntities.size())
-		return; //Error
+		std::exit(-1); //Error
 
 	return this->_ClusterOfEntities[_IndexOfEntity];
 };
