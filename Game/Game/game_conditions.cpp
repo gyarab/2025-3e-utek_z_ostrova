@@ -10,8 +10,8 @@ void PlayerMovement(entity& _Player, user_events& _AllUserEvents, std::mutex& _O
 	if (_AllUserEvents._A_KeyPressed)
 	{
 		_OptionalThreadMutex.lock();
-		_Player._Textures.mark_as_active(0);
-		_Player._Vector[DX] = -1 * _Player._X_Movespeed;
+		_Player._Textures.mark_as_active(MOVING_LEFT);
+		_Player.set_vector_direction_to_left();
 		_Player._IsMoving = true;
 		_OptionalThreadMutex.unlock();
 
@@ -22,8 +22,8 @@ void PlayerMovement(entity& _Player, user_events& _AllUserEvents, std::mutex& _O
 	if (_AllUserEvents._D_KeyPressed)
 	{
 		_OptionalThreadMutex.lock();
-		_Player._Textures.mark_as_active(1);
-		_Player._Vector[DX] = 1 * _Player._X_Movespeed;
+		_Player._Textures.mark_as_active(MOVING_RIGHT);
+		_Player.set_vector_direction_to_right();
 		_Player._IsMoving = true;
 		_OptionalThreadMutex.unlock();
 
@@ -32,7 +32,7 @@ void PlayerMovement(entity& _Player, user_events& _AllUserEvents, std::mutex& _O
 
 	//Stand still
 	_OptionalThreadMutex.lock();
-	_Player._Textures.mark_as_active((_Player._Vector[DX] / _Player._X_Movespeed == -1 ? 2 : 3));
+	_Player._Textures.mark_as_active((_Player.tell_vector_x_direction() == -1 ? STANDING_LEFT : STANDING_RIGHT));
 	_Player._IsMoving = false;
 	_OptionalThreadMutex.unlock();
 
