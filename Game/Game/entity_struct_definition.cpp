@@ -72,7 +72,7 @@ void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
 };
 
 //Function that sets the vector x direction to left by multipling X_Movespeed by -1
-INLINE void entity::set_vector_direction_to_left(void)
+void entity::set_vector_direction_to_left(void)
 {
 	this->_Vector[DX] = -1 * this->_X_Movespeed;
 
@@ -80,7 +80,7 @@ INLINE void entity::set_vector_direction_to_left(void)
 };
 
 //Function that sets the vector x direction to right by multipling X_Movespeed by 1
-INLINE void entity::set_vector_direction_to_right(void)
+void entity::set_vector_direction_to_right(void)
 {
 	this->_Vector[DX] = 1 * this->_X_Movespeed;
 	
@@ -88,7 +88,7 @@ INLINE void entity::set_vector_direction_to_right(void)
 };
 
 //Function that sets the vector y direction to up by multipling Y_Movespeed by -1
-INLINE void entity::set_vector_direction_to_up(void)
+void entity::set_vector_direction_to_up(void)
 {
 	this->_Vector[DY] = -1 * this->_Y_Movespeed;
 
@@ -96,7 +96,7 @@ INLINE void entity::set_vector_direction_to_up(void)
 };
 
 //Function that sets the vector y direction to down by multipling Y_Movespeed by 1
-INLINE void entity::set_vector_direction_to_down(void)
+void entity::set_vector_direction_to_down(void)
 {
 	this->_Vector[DY] = 1 * this->_Y_Movespeed;
 
@@ -104,19 +104,19 @@ INLINE void entity::set_vector_direction_to_down(void)
 };
 
 //Function that tells the vector x direction my dividing it by X_Movespeed [0 = no direction ; -1 = left ; 1 = right]
-INLINE int64_t entity::tell_vector_x_direction(void)
+int64_t entity::tell_vector_x_direction(void)
 {
 	return (this->_Vector[DX] / this->_X_Movespeed);
 };
 
 //Function that tells the vector y direction my dividing it by Y_Movespeed [0 = no direction ; -1 = up ; 1 = down]
-INLINE int64_t entity::tell_vector_y_direction(void)
+int64_t entity::tell_vector_y_direction(void)
 {
 	return (this->_Vector[DY] / this->_Y_Movespeed);
 };
 
 //Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
-INLINE void entity::copy_textures_to(entity& _AnotherEntity)
+void entity::copy_textures_to(entity& _AnotherEntity)
 {
 	//Copy using copy operator=
 	_AnotherEntity._Textures = this->_Textures;
@@ -125,7 +125,7 @@ INLINE void entity::copy_textures_to(entity& _AnotherEntity)
 };
 
 //Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-INLINE void entity::make_one_movement(void)
+void entity::make_one_movement(void)
 {
 	if (!this->_IsMoving || (!this->_IsAlive && !this->_IsImmortal))
 		return;
@@ -152,7 +152,7 @@ void entity::make_movement_while_animating(const std::chrono::milliseconds _Text
 };
 
 //Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
-INLINE void entity::deal_damage_to(entity& _EntityToBeDamaged)
+void entity::deal_damage_to(entity& _EntityToBeDamaged)
 {
 	if (!_EntityToBeDamaged._IsImmortal || !_EntityToBeDamaged._IsAlive)
 		return;
@@ -169,7 +169,7 @@ INLINE void entity::deal_damage_to(entity& _EntityToBeDamaged)
 
 //Redo!
 //Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
-INLINE bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
+bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 {
 	return
 		(
@@ -186,7 +186,7 @@ INLINE bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 };
 
 //Operator for function "hitbox_is_inside_another_hitbox_of"
-INLINE bool operator<=>(entity& _Left, entity& _Right)
+bool operator<=>(entity& _Left, entity& _Right)
 {
 	return _Left.hitbox_is_touching_hitbox_of(_Right);
 };
@@ -196,7 +196,7 @@ INLINE bool operator<=>(entity& _Left, entity& _Right)
 //-----<ECluster>-----vv
 
 //
-INLINE entity& ECluster::operator[](const uint64_t _IndexOfEntity)
+entity& ECluster::operator[](const uint64_t _IndexOfEntity)
 {
 	if (_IndexOfEntity < 0 || _IndexOfEntity >= this->_ClusterOfEntities.size())
 		std::exit(-1); //Error
@@ -205,7 +205,7 @@ INLINE entity& ECluster::operator[](const uint64_t _IndexOfEntity)
 };
 
 //
-INLINE const entity& ECluster::operator[](const uint64_t _IndexOfEntity) const
+const entity& ECluster::operator[](const uint64_t _IndexOfEntity) const
 {
 	if (_IndexOfEntity < 0 || _IndexOfEntity >= this->_ClusterOfEntities.size())
 		std::exit(-1); //Error

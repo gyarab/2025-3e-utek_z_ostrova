@@ -16,20 +16,20 @@ struct TCluster
 
 public:
 	//Mark specifis sub-cluster [should be textures related to same action] of textures as active
-	INLINE void mark_as_active(const uint64_t _IndexofElement);
+	void mark_as_active(const uint64_t _IndexofElement);
 	//Animates the specified sub-cluster by changing the active texture periodically with delay usually resulting in movement
-	INLINE void animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
+	void animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
 	//Verifies if the main container [_ClusterOfTextures] is empty => the whole TCluster should be empty
-	INLINE bool is_empty(void);
+	bool is_empty(void);
 
 	//
-	INLINE std::vector<SDL_Texture*>& operator[](const uint64_t _IndexOfSubcluster);
+	std::vector<SDL_Texture*>& operator[](const uint64_t _IndexOfSubcluster);
 	//
-	INLINE const std::vector<SDL_Texture*>& operator[](const uint64_t _IndexOfSubcluster) const;
+	const std::vector<SDL_Texture*>& operator[](const uint64_t _IndexOfSubcluster) const;
 	//
-	INLINE SDL_Texture* operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture);
+	SDL_Texture* operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture);
 	//
-	INLINE const SDL_Texture* operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const;
+	const SDL_Texture* operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const;
 };
 
 #endif

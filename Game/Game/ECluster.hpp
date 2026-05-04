@@ -11,9 +11,9 @@ struct ECluster
 
 public:
 	//
-	INLINE entity& operator[](const uint64_t _IndexOfEntity);
+	entity& operator[](const uint64_t _IndexOfEntity);
 	//
-	INLINE const entity& operator[](const uint64_t _IndexOfEntity) const;
+	const entity& operator[](const uint64_t _IndexOfEntity) const;
 };
 
 #endif

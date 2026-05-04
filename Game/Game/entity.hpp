@@ -41,32 +41,32 @@ public:
 	//Function that loads the basic info from config file on how entities should be processed
 	void load_basic_info(const std::string& _SpecificCFG_Filename);
 	//Function that sets the vector x direction to left by multipling X_Movespeed by -1
-	INLINE void set_vector_direction_to_left(void);
+	void set_vector_direction_to_left(void);
 	//Function that sets the vector x direction to right by multipling X_Movespeed by 1
-	INLINE void set_vector_direction_to_right(void);
+	void set_vector_direction_to_right(void);
 	//Function that sets the vector y direction to up by multipling Y_Movespeed by -1
-	INLINE void set_vector_direction_to_up(void);
+	void set_vector_direction_to_up(void);
 	//Function that sets the vector y direction to down by multipling Y_Movespeed by 1
-	INLINE void set_vector_direction_to_down(void);
+	void set_vector_direction_to_down(void);
 	//Function that tells the vector x direction my dividing it by X_Movespeed [0 = no direction ; -1 = left ; 1 = right]
-	INLINE int64_t tell_vector_x_direction(void);
+	int64_t tell_vector_x_direction(void);
 	//Function that tells the vector y direction my dividing it by Y_Movespeed [0 = no direction ; -1 = up ; 1 = down]
-	INLINE int64_t tell_vector_y_direction(void);
+	int64_t tell_vector_y_direction(void);
 	//Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
-	INLINE void copy_textures_to(entity& _AnotherEntity);
+	void copy_textures_to(entity& _AnotherEntity);
 	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-	INLINE void make_one_movement(void);
+	void make_one_movement(void);
 	//Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 	void make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
 	//Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
-	INLINE void deal_damage_to(entity& _EntityToBeDamaged);
+	void deal_damage_to(entity& _EntityToBeDamaged);
 	//Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
-	INLINE bool hitbox_is_touching_hitbox_of(entity& _AnotherEntity);
+	bool hitbox_is_touching_hitbox_of(entity& _AnotherEntity);
 
 	//
 };
 
 //Operator for function "hitbox_is_inside_another_hitbox_of"
-INLINE bool operator<=>(entity& _Left, entity& _Right);
+bool operator<=>(entity& _Left, entity& _Right);
 
 #endif

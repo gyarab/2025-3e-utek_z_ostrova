@@ -42,7 +42,7 @@ static INLINE void SetTheTriggeredKeysTo(user_events* _UserEventContainer, const
 };
 
 //Polls recently made events and interprets them by conditions as mostly bools or numbers that could be used to alter the game status later on
-INLINE void user_events::collect_recent_events(void)
+void user_events::collect_recent_events(void)
 {
 	//Get event poll and process it
 	SDL_PollEvent(&this->_CurrentUserEvents);

@@ -1,7 +1,7 @@
 #include "escape_from_the_island.hpp"
 
 //Mark specifis sub-cluster [should be textures related to same action] of textures as active
-INLINE void TCluster::mark_as_active(const uint64_t _IndexofElement)
+void TCluster::mark_as_active(const uint64_t _IndexofElement)
 {
 	if (_IndexofElement < 0 || _IndexofElement >= _ClusterOfTextures.size())
 		return; //Error
@@ -12,7 +12,7 @@ INLINE void TCluster::mark_as_active(const uint64_t _IndexofElement)
 };
 
 //Animates the specified sub-cluster by changing the active texture periodically with delay usually resulting in movement
-INLINE void TCluster::animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex)
+void TCluster::animate_through_textures(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex)
 {
 	for (uint64_t c = NULL; c < this->_ActiveSubcluster->size(); c++)
 	{
@@ -26,13 +26,13 @@ INLINE void TCluster::animate_through_textures(const std::chrono::milliseconds _
 };
 
 //Verifies if the main container [_ClusterOfTextures] is empty => the whole TCluster should be empty
-INLINE bool TCluster::is_empty(void)
+bool TCluster::is_empty(void)
 {
 	return (this->_ClusterOfTextures.size() == 0);
 };
 
 //
-INLINE std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster)
+std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster)
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
 		std::exit(-1); //Error
@@ -42,7 +42,7 @@ INLINE std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSu
 };
 
 //
-INLINE const std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster) const
+const std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _IndexOfSubcluster) const
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
 		std::exit(-1); //Error
@@ -51,7 +51,7 @@ INLINE const std::vector<SDL_Texture*>& TCluster::operator[](const uint64_t _Ind
 };
 
 //
-INLINE SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture)
+SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture)
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
 		std::exit(-1); //Error
@@ -63,7 +63,7 @@ INLINE SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, cons
 };
 
 //
-INLINE const SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const
+const SDL_Texture* TCluster::operator()(const uint64_t _IndexOfSubcluster, const uint64_t _SubindexOfTexture) const
 {
 	if (_IndexOfSubcluster < 0 || _IndexOfSubcluster >= this->_ClusterOfTextures.size())
 		std::exit(-1); //Error

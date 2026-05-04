@@ -25,7 +25,7 @@ struct user_events
 
 public:
 	//Polls recently made events and interprets them by conditions as mostly bools or numbers that could be used to alter the game status later on
-	INLINE void collect_recent_events(void);
+	void collect_recent_events(void);
 };
 
 #endif
