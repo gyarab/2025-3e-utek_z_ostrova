@@ -4,9 +4,6 @@ namespace BackgroundThread //[start]
 {
 
 //Thread that animates the water on the background by animating its textures
-#if 0
-void Main(SDL_Texture** _DisplayedTexture, TCluster** const _TexturesToAnimate, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish)
-#endif
 void Main(entity* _Background, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish)
 {
 	//Mutex to safely operate with critical sector from 'BackgroundThread'
