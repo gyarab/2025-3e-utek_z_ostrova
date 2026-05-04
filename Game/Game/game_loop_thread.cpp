@@ -126,6 +126,9 @@ void MainLoop(WRCluster& _MainWindow, ECluster& _AllEntities, user_events& _AllU
 	_AllEntities[PLAYER]._Textures.mark_as_active(0);
 	_AllEntities[BACKGROUND]._Textures.mark_as_active(0);
 
+	//Temp!
+	_AllEntities[PLAYER]._Hitbox.y = 4 * 127;
+	
 	while (true)
 	{
 		_AllUserEvents.collect_recent_events();
@@ -133,6 +136,8 @@ void MainLoop(WRCluster& _MainWindow, ECluster& _AllEntities, user_events& _AllU
 		//User requested to close the window - shutdown the game
 		if (_AllUserEvents._ShutdownRequested)
 			break;
+
+		GameConditions::PlayerMovement(_AllEntities[PLAYER], _AllUserEvents, MutexForMainThread);
 
 		//Change this!
 #if 0

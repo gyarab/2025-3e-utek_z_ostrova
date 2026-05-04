@@ -133,9 +133,7 @@ void PrepareECluster(ECluster& _Entities);
 
 namespace GameConditions //[start]
 {
-
-
-
+void PlayerMovement(entity& _Player, user_events& _AllUserEvents, std::mutex& _OptionalThreadMutex);
 }
 //GameConditions [end]
 
