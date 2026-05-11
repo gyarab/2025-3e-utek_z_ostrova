@@ -31,7 +31,7 @@
 #define SELECTOR_tMenuButtons "tMenuButtons"
 #define SELECTOR_tFloatingStone "tFloatingStone"
 #define SELECTOR_tPoisonedArrow "tPoisonedArrow"
-#define SELECTOR_tStone "tStone"
+#define SELECTOR_tCrate "tCrate"
 
 //This is a concept its not meant to be compiled!
 #if 0

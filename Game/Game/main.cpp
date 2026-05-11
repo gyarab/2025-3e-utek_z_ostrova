@@ -1,7 +1,7 @@
 #include "escape_from_the_island.hpp"
 
-//First game version - 2 levels, walking player, some obstacles, menu screen
-//'WinMain' has to be used as entry point
+//Main info is in project master header
+//'WinMain' has to be used as entry point as in the compilers set subsystem:WINDOWS requires it
 int WinMain(int argc, char** argv)
 {
 	//Creating log file
@@ -19,6 +19,8 @@ int WinMain(int argc, char** argv)
 	ECluster AllEntities;
 	//Initialize container for user events
 	user_events AllUserEvents;
+	//
+	game_env GameState;
 	
 	//Prepare window and renderer for game loop
 	WindowRenderHandle::CreateNewWindowWithRenderers(MainWindow);
@@ -29,7 +31,7 @@ int WinMain(int argc, char** argv)
 	//Prepare textures
 	TextureHandle::PrepareForAllEntities(MainWindow, AllEntities);
 	//Game starts
-	GameLoopThread::MainLoop(MainWindow, AllEntities, AllUserEvents);
+	GameLoop::MainLoop(MainWindow, AllEntities, AllUserEvents, GameState);
 	//Destroy game window and renderer before closing program
 	WindowRenderHandle::DestroyWindowWithRenderers(MainWindow);
 

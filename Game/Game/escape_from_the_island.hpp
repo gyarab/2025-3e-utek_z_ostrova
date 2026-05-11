@@ -1,8 +1,23 @@
 #ifndef ESCAPE_FROM_THE_ISLAND
 #define ESCAPE_FROM_THE_ISLAND
 
-//Current game version: 1.1.0.0
+//-----<GAME PROJECT MASTER HEADER>-----
+//Current game version: 1.2.1.8
 
+//First playable version:
+//The runtime is stable - working menu + all 3 lvls, but they can be just passed by walking straight
+
+//Unsolved:
+//The code is still very messy!
+//Theres some yet unsolved issues!
+//The code will hopefully get clean and in order by me soon!
+//Some other config and asset file rearrangements might be done too!
+//Also the number of headers might reduce!
+//Also new code content and comments in the code may appear!
+//Better error handle and runtime log should be made!
+//Better data structs + split texture and entity hitbox into two!
+
+//Optional:
 //Accelerate rendering on GPU!
 
 //Standard C++ lib - some yet unused
@@ -11,9 +26,12 @@
 #include <vector>
 #include <array>
 #include <set>
-#include <thread>
+#include <thread> //Threads may be used later when it will be actually needed! - now just for thread sleep
+#if 0
 #include <atomic>
 #include <mutex>
+#include <semaphore>
+#endif
 #include <fstream>
 #include <filesystem>
 #include <sstream>
@@ -29,12 +47,14 @@
 #define INLINE inline
 #endif
 
+//Too much headers it looks like!
 //Other internal headers with definitions that are important for this program
 #include "WRCluster.hpp"
 #include "TCluster.hpp"
 #include "entity.hpp"
 #include "ECluster.hpp"
 #include "user_events.hpp"
+#include "game_env.hpp"
 #include "config_file_content_info.hpp"
 #include "error_messages_codes.hpp"
 
@@ -79,6 +99,46 @@ enum PlayerTextureSubclustersIndexes : uint64_t
 	STANDING_RIGHT	= 3
 };
 
+//
+enum BackgroundTextureSubclustersIndexes : uint64_t
+{
+	BACKGROUND_LEVEL_1 = 0,
+	BACKGROUND_LEVEL_2 = 1,
+	BACKGROUND_ISLAND = 2
+};
+
+//
+enum MenuPanelTextureSubclustersIndexes : uint64_t
+{
+	PANEL = 0
+};
+
+//
+enum MenuButtonsTextureSubclustersIndexes : uint64_t
+{
+	BUTTONS = 1
+};
+
+//
+enum MenuButtonsTextureSubindexes : uint64_t
+{
+	PLAY_LEVELS_QUIT = 0,
+	HIGHLIGHTED_PLAY = 1,
+	HIGHLIGHTED_LEVELS = 2,
+	HIGHLIGHTED_QUIT = 3,
+};
+
+//
+enum ObstaclesTextureSubclustersIndexes : uint64_t
+{
+	TEXTURE_FLOATING_STONE = 0,
+	TEXTURE_POISONED_ARROW = 1,
+	TEXTURE_CRATE_1 = 2,
+	TEXTURE_CRATE_2 = 3
+};
+
+//problems with enum collisions!
+
 namespace WindowRenderHandle //[start]
 {
 //Initialize a specified amount of renderers for a specified window
@@ -114,30 +174,25 @@ void PrepareECluster(ECluster& _Entities);
 
 namespace GameConditions //[start]
 {
-void PlayerMovement(entity& _Player, user_events& _AllUserEvents, std::mutex& _OptionalThreadMutex);
+//
+void LocationChange(user_events& _AllUserEvents, game_env& _GameState);
+//
+void MenuButtonHighlightAndTrigger(entity& _MenuButtons, user_events& _AllUserEvents, game_env& _GameState);
+//
+void PlayerMovement(entity& _Player, user_events& _AllUserEvents);
+//
+void PlayerJump(entity& _Player, user_events& _AllUserEvents, game_env& _GameState);
+//
+void PlayerCollisions(ECluster& _AllEntities, user_events& _AllUserEvents, game_env& _GameState);
 }
 //GameConditions [end]
 
-namespace GameLoopThread //[start]
+namespace GameLoop //[start]
 {
 //Loop for processing user events and rendering the game - runs on 'Main thread'
-void MainLoop(WRCluster& _MainWindow, ECluster& _AllEntities, user_events& _AllUserEvents);
+void MainLoop(WRCluster& _MainWindow, ECluster& _AllEntities, user_events& _AllUserEvents, game_env& _GameState);
 }
-//GameLoopThread [end]
-
-namespace PlayerThread //[start]
-{
-//Thread that makes player move by changing its horizontal coords and animating its textures
-void Main(entity* _Player, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
-}
-//PlayerThread [end]
-
-namespace BackgroundThread //[start]
-{
-//Thread that animates the water on the background by animating its textures
-void Main(entity* _Background, const std::chrono::milliseconds _TextureUpdateDelay, std::atomic_bool* const _ThreadShouldFinish);
-};
-//BackgroundThread [end]
+//GameLoop [end]
 
 namespace ConfigFile //[start]
 {

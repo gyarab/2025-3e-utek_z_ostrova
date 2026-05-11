@@ -164,6 +164,9 @@ void PrepareForAllEntities(WRCluster& _MainWindow, ECluster& _AllEntities)
 
 	//BackgroundHitbox has no textures
 	_AllEntities[BACKGROUND_HITBOX]._Textures = TCluster();
+	
+	for (entity& OneEntity : _AllEntities._ClusterOfEntities)
+		OneEntity._Textures.prepare_active_pointers();
 
 	return;
 };

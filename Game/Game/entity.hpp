@@ -15,11 +15,11 @@ enum EntityVectorIndexes
 struct entity
 {
 	//Two numbers [_Vector[0] = dx ; _Vector[1] = dy] defining the direction which the entity will be facing / moving into usually related to movespeed and jump power
-	int64_t _Vector[2] = { NULL, NULL };
-	//Bool that tells if the entity is in the moving state
-	bool _IsMoving = false;
+	float _Vector[2] = { NULL, NULL };
 	//Bool that tells whether the entity is alive [hp > 0] or not
 	bool _IsAlive = false;
+	//
+	bool _IsRenderable = false;
 	
 	//Rectange defining both position and size of the entity [not its texture directly]
 	SDL_FRect _Hitbox = SDL_FRect();
@@ -30,9 +30,9 @@ struct entity
 	//A non-negative number that tells how many hp can the entity take away from another entity [0 = no damage]
 	uint64_t _Damage = NULL;
 	//A non-negative number that tells how much will the entity move on the X-axis
-	int64_t _X_Movespeed = NULL;
+	float _X_Movespeed = NULL;
 	//A non-negative number that tells how much will the entity move on the Y-axis
-	int64_t _Y_Movespeed = NULL;
+	float _Y_Movespeed = NULL;
 
 	//All posible textures the entity can use to display itself
 	TCluster _Textures = TCluster();
@@ -48,6 +48,10 @@ public:
 	void set_vector_direction_to_up(void);
 	//Function that sets the vector y direction to down by multipling Y_Movespeed by 1
 	void set_vector_direction_to_down(void);
+	//Function that sets the vector x direction to be zero - entity is not moving
+	void nullify_vector_x_direction(void);
+	//Function that sets the vector y direction to be zero - entity is not moving
+	void nullify_vector_y_direction(void);
 	//Function that tells the vector x direction my dividing it by X_Movespeed [0 = no direction ; -1 = left ; 1 = right]
 	int64_t tell_vector_x_direction(void);
 	//Function that tells the vector y direction my dividing it by Y_Movespeed [0 = no direction ; -1 = up ; 1 = down]
@@ -56,14 +60,14 @@ public:
 	void copy_textures_to(entity& _AnotherEntity);
 	//Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 	void make_one_movement(void);
-	//Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-	void make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex = nullptr);
 	//Function that takes away health of another entitys hp [if its not immortal and its alive] based on this entitys dmg - cant go to negative
 	void deal_damage_to(entity& _EntityToBeDamaged);
 	//Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
 	bool hitbox_is_touching_hitbox_of(entity& _AnotherEntity);
-
 	//
+	void render_itself(SDL_Renderer*& _TextureRenderer, const bool _F1_KeyPressed);
+	//
+
 };
 
 //Operator for function "hitbox_is_inside_another_hitbox_of"

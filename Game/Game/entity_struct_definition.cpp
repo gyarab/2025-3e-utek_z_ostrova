@@ -39,7 +39,8 @@ void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
 {
 	std::string AssetConfigDir, OneLine;
 	int64_t ScalingCoefficient = NULL;
-	std::array<uint64_t, 5> ResultNumbers = {}; //Exactly 5 numbers
+	std::array<uint64_t, 3> ResultNumbers = {}; //Exactly 3 numbers
+	std::array<float, 2> ResultFloats = {}; //Exactly 2 floats
 
 	LoadBasicEntitiesProps(AssetConfigDir, ScalingCoefficient);
 
@@ -55,15 +56,20 @@ void entity::load_basic_info(const std::string& _SpecificCFG_Filename)
 		ResultNumbers[c] = std::stoull(OneLine);
 	}
 
+	for (uint64_t c = NULL; c < ResultFloats.size(); c++)
+	{
+		std::getline(EntityCFG, OneLine);
+		ResultFloats[c] = std::stof(OneLine);
+	}
+
 	this->_IsImmortal = (ResultNumbers[0] == 1);
 	this->_Health = ResultNumbers[1];
 	this->_Damage = ResultNumbers[2];
-	this->_X_Movespeed = ScalingCoefficient * ResultNumbers[3];
-	this->_Y_Movespeed = ScalingCoefficient * ResultNumbers[4];
+	this->_X_Movespeed = ScalingCoefficient * ResultFloats[0];
+	this->_Y_Movespeed = ScalingCoefficient * ResultFloats[1];
 
 	this->_Vector[DX] = NULL;
 	this->_Vector[DY] = NULL;
-	this->_IsMoving = false;
 	this->_IsAlive = (this->_Health > 0);
 
 	this->_Textures = TCluster(); //
@@ -103,16 +109,32 @@ void entity::set_vector_direction_to_down(void)
 	return;
 };
 
+//Function that sets the vector x direction to be zero - entity is not moving
+void entity::nullify_vector_x_direction(void)
+{
+	this->_Vector[DX] = 0;
+
+	return;
+};
+
+//Function that sets the vector y direction to be zero - entity is not moving
+void entity::nullify_vector_y_direction(void)
+{
+	this->_Vector[DY] = 0;
+
+	return;
+};
+
 //Function that tells the vector x direction my dividing it by X_Movespeed [0 = no direction ; -1 = left ; 1 = right]
 int64_t entity::tell_vector_x_direction(void)
 {
-	return (this->_Vector[DX] / this->_X_Movespeed);
+	return (int64_t)(this->_Vector[DX] / this->_X_Movespeed);
 };
 
 //Function that tells the vector y direction my dividing it by Y_Movespeed [0 = no direction ; -1 = up ; 1 = down]
 int64_t entity::tell_vector_y_direction(void)
 {
-	return (this->_Vector[DY] / this->_Y_Movespeed);
+	return (int64_t)(this->_Vector[DY] / this->_Y_Movespeed);
 };
 
 //Function that copies all textures of this entity to a different entity - should be called only when preparing new ECluster
@@ -127,26 +149,11 @@ void entity::copy_textures_to(entity& _AnotherEntity)
 //Function that changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
 void entity::make_one_movement(void)
 {
-	if (!this->_IsMoving || (!this->_IsAlive && !this->_IsImmortal))
+	if (!this->_IsAlive && !this->_IsImmortal)
 		return;
 
 	this->_Hitbox.x += _Vector[DX];
 	this->_Hitbox.y += _Vector[DY];
-
-	return;
-};
-
-//Function that animates the entitys TCluster and changes _Hitbox position based on the _Vector values once only if _IsMoving is true and its alive or immortal
-void entity::make_movement_while_animating(const std::chrono::milliseconds _TextureUpdateDelay, std::mutex* _OptionalThreadMutex)
-{
-	for (uint64_t c = NULL; c < this->_Textures._ActiveSubcluster->size(); c++)
-	{
-		this->make_one_movement();
-		_OptionalThreadMutex->lock();
-		this->_Textures._ActiveTexture = (this->_Textures._ActiveSubcluster->data() + c);
-		_OptionalThreadMutex->unlock();
-		std::this_thread::sleep_for(_TextureUpdateDelay);
-	}
 
 	return;
 };
@@ -184,6 +191,35 @@ bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 			(_AnotherEntity._Hitbox.y >= this->_Hitbox.y && _AnotherEntity._Hitbox.y <= this->_Hitbox.y + this->_Hitbox.h)
 		);
 };
+
+//
+void entity::render_itself(SDL_Renderer*& _TextureRenderer, const bool _F1_KeyPressed)
+{
+	if (!this->_IsRenderable || this->_Textures._ActiveTexture == nullptr)
+		return; //
+
+	SDL_RenderTexture(_TextureRenderer, *this->_Textures._ActiveTexture, NULL, &this->_Hitbox);
+
+	//Temp -> Hitbox highlight!
+	if (!_F1_KeyPressed)
+		return;
+
+	//Hitbox rectangle
+	SDL_SetRenderDrawColor(_TextureRenderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+	SDL_RenderRect(_TextureRenderer, &this->_Hitbox);
+	//Hitbox diagonals
+	SDL_SetRenderDrawColor(_TextureRenderer, 255, 0, 0, SDL_ALPHA_OPAQUE);
+	SDL_RenderLine(_TextureRenderer, this->_Hitbox.x, this->_Hitbox.y, this->_Hitbox.x + this->_Hitbox.w, this->_Hitbox.y + this->_Hitbox.h);
+	SDL_RenderLine(_TextureRenderer, this->_Hitbox.x + this->_Hitbox.w, this->_Hitbox.y, this->_Hitbox.x, this->_Hitbox.y + this->_Hitbox.h);
+
+	//Hitbox vector
+	SDL_SetRenderDrawColor(_TextureRenderer, 0, 0, 255, SDL_ALPHA_OPAQUE);
+	SDL_RenderLine(_TextureRenderer, this->_Hitbox.x + (this->_Hitbox.w / 2), this->_Hitbox.y + (this->_Hitbox.h / 2), this->_Hitbox.x + (this->_Hitbox.w / 2) + 4 * (this->_Vector[DX]), this->_Hitbox.y + (this->_Hitbox.h / 2) + 4 * (this->_Vector[DY]));
+	//
+	SDL_SetRenderDrawColor(_TextureRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
+	return;
+}
 
 //Operator for function "hitbox_is_inside_another_hitbox_of"
 bool operator<=>(entity& _Left, entity& _Right)

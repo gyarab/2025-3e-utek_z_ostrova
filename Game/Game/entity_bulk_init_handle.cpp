@@ -12,7 +12,7 @@ static void LoadTextureCFG_FilesPropsIntoOneArray(std::array<std::string, 8>& _A
 		SELECTOR_tMenuButtons,
 		SELECTOR_tFloatingStone,
 		SELECTOR_tPoisonedArrow,
-		SELECTOR_tStone
+		SELECTOR_tCrate
 	};
 
 	for (uint64_t c = NULL; c < 8; c++)
