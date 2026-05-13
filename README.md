@@ -8,13 +8,13 @@ Cílem hráče je dostat se ze začátku úrovně až do cíle a překonat všec
 Hráč si tak bude muset osvojit logiku hry, zapamatovat si rozmístění překážek a najít způsob, jak úroveň úspěšně projít. 
 
 ### Instalace a spuštění hry
-1. Stáhněte si archiv "escape_from_the_island_1_1_0_0.zip" z [releasu v1.1.0.0](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.1.0.0).
+1. Stáhněte si archiv "escape_from_the_island_1_2_2_6.zip" z [releasu v1.2.2.6](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.2.2.6).
 2. Poté ho extrahujte to jakékoli složky a nechte konfigurační soubory, .dll a další adresáře tak, jak jsou.
 3. Spusťtě "escape_from_the_island.exe".
 4. V případě problému by se v adresáři "logs" měl daný problém zalogovat [*ne vše je 100 % ošetřeno*].
 
 ### Vlastní kompilace hry - MS Visual Studio 2022, MSVC compiler
-1. Stáhněte si zdrojové kódy v .zip archivu z [releasu v1.1.0.0](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.1.0.0).
+1. Stáhněte si zdrojové kódy v .zip archivu z [releasu v1.2.2.6](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.2.2.6).
 2. Alternativně si můžete vyklonovat repozitář do vašeho projektu ve VS 2022.
 3. Stáhněte si z github repozitáře oficiální verzi [SDL knihovny](https://github.com/libsdl-org/SDL/releases) & [SDL_image knihovny](https://github.com/libsdl-org/SDL_image/releases), kterou tento project momentálně používá.
 4. Všechno by se mělo automaticky nastavit, pokud ve VS 2022 otevřete soubor řešení "Game.sln" a vše ostatní necháte tam, kde je.
@@ -41,13 +41,13 @@ The level becomes increasingly challenging – new obstacles and game mechanics 
 The player must learn the game’s logic, remember the placement of obstacles, and find a way to complete the level successfully. 
 
 ### Installing and Running the Game
-1. Download the archive "escape_from_the_island_1_1_0_0.zip" from the [v1.1.0.0 release](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.1.0.0).
+1. Download the archive "escape_from_the_island_1_2_2_6.zip" from the [v1.2.2.6 release](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.2.2.6).
 2. Then extract it to any folder and leave the configuration files, .dll files, and other directories where they are.
 3. Run "escape_from_the_island.exe".
 4. If a problem occurs, it should be logged in the "logs" directory [*not everything is 100% covered*].
 
 ### Compiling the Game Yourself - MS Visual Studio 2022, MSVC Compiler
-1. Download the source code in a .zip archive from the [v1.1.0.0 release](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.1.0.0).
+1. Download the source code in a .zip archive from the [v1.2.2.6 release](https://github.com/gyarab/2025-3e-utek_z_ostrova/releases/tag/v1.2.2.6).
 2. Alternatively, you can clone the repository into your project in VS 2022.
 3. Download the official versions of the [SDL library](https://github.com/libsdl-org/SDL/releases) & [SDL_image library](https://github.com/libsdl-org/SDL_image/releases) from the GitHub repository, which this project currently uses.
 4. Everything should be set up automatically if you open the "Game.sln" solution file in VS 2022 and leave everything else as is.
