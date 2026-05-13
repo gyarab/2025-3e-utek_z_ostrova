@@ -159,8 +159,11 @@ void PrepareForAllEntities(WRCluster& _MainWindow, ECluster& _AllEntities)
 
 	//Some entities share the same base texture - theyll be just copied
 	_AllEntities[MENU_PANEL].copy_textures_to(_AllEntities[MENU_BUTTONS]);
-	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[POISONED_ARROW]);
-	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[STONE]);
+	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[SPIKE]);
+	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[CRATE_1]);
+	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[CRATE_2]);
+	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[CRATE_3]);
+	_AllEntities[FLOATING_STONE].copy_textures_to(_AllEntities[CRATE_4]);
 
 	//BackgroundHitbox has no textures
 	_AllEntities[BACKGROUND_HITBOX]._Textures = TCluster();

@@ -11,7 +11,7 @@ static void LoadTextureCFG_FilesPropsIntoOneArray(std::array<std::string, 8>& _A
 		SELECTOR_tMenuPanel,
 		SELECTOR_tMenuButtons,
 		SELECTOR_tFloatingStone,
-		SELECTOR_tPoisonedArrow,
+		SELECTOR_tSpike,
 		SELECTOR_tCrate
 	};
 
@@ -37,6 +37,11 @@ void PrepareECluster(ECluster& _Entities)
 		NewEntity.load_basic_info(AllCFG_Filenames[c]);
 		_Entities._ClusterOfEntities.push_back(NewEntity);
 	}
+
+	//Temp!
+	_Entities._ClusterOfEntities.push_back(_Entities[_Entities._ClusterOfEntities.size() - 1]);
+	_Entities._ClusterOfEntities.push_back(_Entities[_Entities._ClusterOfEntities.size() - 1]);
+	_Entities._ClusterOfEntities.push_back(_Entities[_Entities._ClusterOfEntities.size() - 1]);
 
 	return;
 };

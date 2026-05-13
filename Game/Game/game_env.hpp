@@ -48,7 +48,7 @@ public:
 	//
 	void set_location(const GameLocationNames _CurrentLocation);
 	//
-	void prepare_location(ECluster& _AllEntities);
+	void prepare_location(ECluster& _AllEntities, HCluster& _AllOtherHitboxes);
 };
 
 #endif

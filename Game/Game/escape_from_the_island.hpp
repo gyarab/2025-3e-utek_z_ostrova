@@ -2,7 +2,7 @@
 #define ESCAPE_FROM_THE_ISLAND
 
 //-----<GAME PROJECT MASTER HEADER>-----
-//Current game version: 1.2.1.8
+//Current game version: 1.2.2.6
 
 //First playable version:
 //The runtime is stable - working menu + all 3 lvls, but they can be just passed by walking straight
@@ -51,6 +51,7 @@
 //Other internal headers with definitions that are important for this program
 #include "WRCluster.hpp"
 #include "TCluster.hpp"
+#include "hitbox.hpp"
 #include "entity.hpp"
 #include "ECluster.hpp"
 #include "user_events.hpp"
@@ -86,8 +87,11 @@ enum EntitiesNames : uint64_t
 	MENU_PANEL			= 3,
 	MENU_BUTTONS		= 4,
 	FLOATING_STONE		= 5,
-	POISONED_ARROW		= 6,
-	STONE				= 7
+	SPIKE				= 6,
+	CRATE_1				= 7,
+	CRATE_2				= 8,
+	CRATE_3				= 9,
+	CRATE_4				= 10
 };
 
 //Names for the indexes of the subclusters of PlayerTextureCluster 
@@ -132,9 +136,19 @@ enum MenuButtonsTextureSubindexes : uint64_t
 enum ObstaclesTextureSubclustersIndexes : uint64_t
 {
 	TEXTURE_FLOATING_STONE = 0,
-	TEXTURE_POISONED_ARROW = 1,
+	TEXTURE_SPIKE = 1,
 	TEXTURE_CRATE_1 = 2,
 	TEXTURE_CRATE_2 = 3
+};
+
+//
+enum OtherHitboxesIndexes : uint64_t
+{
+	LEVEL_FLOOR = 0,
+	MOUNTAIN = 1,
+	ENTRANCE_GATE = 2,
+	EXIT_GATE = 3,
+	BOAT_RUDDER = 4
 };
 
 //problems with enum collisions!
@@ -183,7 +197,15 @@ void PlayerMovement(entity& _Player, user_events& _AllUserEvents);
 //
 void PlayerJump(entity& _Player, user_events& _AllUserEvents, game_env& _GameState);
 //
-void PlayerCollisions(ECluster& _AllEntities, user_events& _AllUserEvents, game_env& _GameState);
+void PlayerCollisions(ECluster& _AllEntities, HCluster& _AllOtherHitboxes);
+//
+void FloatingStoneMovement(entity& _FloatingStone);
+//
+void FloatingStonePlayerInteraction(ECluster& _AllEntities);
+//
+void SpikeAndRudderPlayerInteration(ECluster& _AllEntities, game_env& _GameState, HCluster& _AllOtherHitboxes);
+//
+void LevelChange(ECluster& _AllEntities, game_env& _GameState, HCluster& _AllOtherHitboxes);
 }
 //GameConditions [end]
 

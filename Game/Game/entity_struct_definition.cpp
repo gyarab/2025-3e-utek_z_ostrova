@@ -178,17 +178,184 @@ void entity::deal_damage_to(entity& _EntityToBeDamaged)
 //Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
 bool entity::hitbox_is_touching_hitbox_of(entity& _AnotherEntity)
 {
+	if (!_AnotherEntity._IsRenderable)
+		return false; //
+
 	return
 		(
 			(this->_Hitbox.x >= _AnotherEntity._Hitbox.x && this->_Hitbox.x <= _AnotherEntity._Hitbox.x + _AnotherEntity._Hitbox.w)
-			&&
-			(this->_Hitbox.y >= _AnotherEntity._Hitbox.y && this->_Hitbox.y <= _AnotherEntity._Hitbox.y + _AnotherEntity._Hitbox.h)
+			||
+			(this->_Hitbox.x + this->_Hitbox.w >= _AnotherEntity._Hitbox.x && this->_Hitbox.x + this->_Hitbox.w <= _AnotherEntity._Hitbox.x + _AnotherEntity._Hitbox.w)
 		)
-		||
+		&&
 		(
-			(_AnotherEntity._Hitbox.x >= this->_Hitbox.x && _AnotherEntity._Hitbox.x <= this->_Hitbox.x + this->_Hitbox.w)
+			(this->_Hitbox.y >= _AnotherEntity._Hitbox.y && this->_Hitbox.y <= _AnotherEntity._Hitbox.y + _AnotherEntity._Hitbox.h)
+			||
+			(this->_Hitbox.y + this->_Hitbox.h >= _AnotherEntity._Hitbox.y && this->_Hitbox.y + this->_Hitbox.h <= _AnotherEntity._Hitbox.y + _AnotherEntity._Hitbox.h)
+		);
+};
+
+//Temp!!!
+bool entity::hitbox_is_touching_hitbox_on_left(entity& _AnotherEntity)
+{
+	if (!_AnotherEntity._IsRenderable)
+		return false; //
+
+	return
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherEntity)
+		)
+		&&
+		(
+			(this->_Hitbox.x <= _AnotherEntity._Hitbox.x + _AnotherEntity._Hitbox.w)
 			&&
-			(_AnotherEntity._Hitbox.y >= this->_Hitbox.y && _AnotherEntity._Hitbox.y <= this->_Hitbox.y + this->_Hitbox.h)
+			(this->_Hitbox.x + this->_Hitbox.w > _AnotherEntity._Hitbox.x + _AnotherEntity._Hitbox.w)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_right(entity& _AnotherEntity)
+{
+	if (!_AnotherEntity._IsRenderable)
+		return false; //
+
+	return
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherEntity)
+		)
+		&&
+		(
+			(this->_Hitbox.x + this->_Hitbox.w >= _AnotherEntity._Hitbox.x)
+			&&
+			(this->_Hitbox.x < _AnotherEntity._Hitbox.x)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_up(entity& _AnotherEntity)
+{
+	if (!_AnotherEntity._IsRenderable)
+		return false; //
+
+	return
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherEntity)
+		)
+		&&
+		(
+			(this->_Hitbox.y <= _AnotherEntity._Hitbox.y + _AnotherEntity._Hitbox.h)
+			&&
+			(this->_Hitbox.y + this->_Hitbox.h > _AnotherEntity._Hitbox.y + _AnotherEntity._Hitbox.h)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_down(entity& _AnotherEntity)
+{
+	if (!_AnotherEntity._IsRenderable)
+		return false; //
+
+	return
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherEntity)
+		)
+		&&
+		(
+			(this->_Hitbox.y + this->_Hitbox.h >= _AnotherEntity._Hitbox.y)
+			&&
+			(this->_Hitbox.y < _AnotherEntity._Hitbox.y)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_of(hitbox& _AnotherHitbox)
+{
+	if (!_AnotherHitbox._IsActive)
+		return false; //
+
+	return
+		(
+			(this->_Hitbox.x >= _AnotherHitbox._Hitbox.x && this->_Hitbox.x <= _AnotherHitbox._Hitbox.x + _AnotherHitbox._Hitbox.w)
+			||
+			(this->_Hitbox.x + this->_Hitbox.w >= _AnotherHitbox._Hitbox.x && this->_Hitbox.x + this->_Hitbox.w <= _AnotherHitbox._Hitbox.x + _AnotherHitbox._Hitbox.w)
+		)
+		&&
+		(
+			(this->_Hitbox.y >= _AnotherHitbox._Hitbox.y && this->_Hitbox.y <= _AnotherHitbox._Hitbox.y + _AnotherHitbox._Hitbox.h)
+			||
+			(this->_Hitbox.y + this->_Hitbox.h >= _AnotherHitbox._Hitbox.y && this->_Hitbox.y + this->_Hitbox.h <= _AnotherHitbox._Hitbox.y + _AnotherHitbox._Hitbox.h)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_left(hitbox& _AnotherHitbox)
+{
+	if (!_AnotherHitbox._IsActive)
+		return false; //
+
+	return
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherHitbox)
+		)
+		&&
+		(
+			(this->_Hitbox.x <= _AnotherHitbox._Hitbox.x + _AnotherHitbox._Hitbox.w)
+			&&
+			(this->_Hitbox.x + this->_Hitbox.w > _AnotherHitbox._Hitbox.x + _AnotherHitbox._Hitbox.w)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_right(hitbox& _AnotherHitbox)
+{
+	if (!_AnotherHitbox._IsActive)
+		return false; //
+
+	return 		
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherHitbox)
+		)
+		&&
+		(
+			(this->_Hitbox.x + this->_Hitbox.w >= _AnotherHitbox._Hitbox.x)
+			&&
+			(this->_Hitbox.x < _AnotherHitbox._Hitbox.x)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_up(hitbox& _AnotherHitbox)
+{
+	if (!_AnotherHitbox._IsActive)
+		return false; //
+
+	return
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherHitbox)
+		)
+		&&
+		(
+			(this->_Hitbox.y <= _AnotherHitbox._Hitbox.y + _AnotherHitbox._Hitbox.h)
+			&&
+			(this->_Hitbox.y + this->_Hitbox.h > _AnotherHitbox._Hitbox.y + _AnotherHitbox._Hitbox.h)
+		);
+};
+
+//
+bool entity::hitbox_is_touching_hitbox_on_down(hitbox& _AnotherHitbox)
+{
+	if (!_AnotherHitbox._IsActive)
+		return false; //
+
+	return 
+		(
+			this->hitbox_is_touching_hitbox_of(_AnotherHitbox)
+		)
+		&&
+		(
+			(this->_Hitbox.y + this->_Hitbox.h >= _AnotherHitbox._Hitbox.y)
+			&&
+			(this->_Hitbox.y < _AnotherHitbox._Hitbox.y)
 		);
 };
 

@@ -30,7 +30,7 @@
 #define SELECTOR_tMenuPanel "tMenuPanel"
 #define SELECTOR_tMenuButtons "tMenuButtons"
 #define SELECTOR_tFloatingStone "tFloatingStone"
-#define SELECTOR_tPoisonedArrow "tPoisonedArrow"
+#define SELECTOR_tSpike "tSpike"
 #define SELECTOR_tCrate "tCrate"
 
 //This is a concept its not meant to be compiled!

@@ -1,5 +1,5 @@
-#ifndef RCLUSTER
-#define RCLUSTER
+#ifndef WRCLUSTER
+#define WRCLUSTER
 
 //
 #include "escape_from_the_island.hpp"

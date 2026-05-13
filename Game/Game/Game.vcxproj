@@ -155,6 +155,7 @@
     <ClCompile Include="error_handle.cpp" />
     <ClCompile Include="game_loop.cpp" />
     <ClCompile Include="config_file.cpp" />
+    <ClCompile Include="hitbox_struct_definition.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="runtime_log.cpp" />
     <ClCompile Include="TCluster_struct_definition.cpp" />
@@ -169,6 +170,7 @@
     <ClInclude Include="error_messages_codes.hpp" />
     <ClInclude Include="escape_from_the_island.hpp" />
     <ClInclude Include="game_env.hpp" />
+    <ClInclude Include="hitbox.hpp" />
     <ClInclude Include="user_events.hpp" />
     <ClInclude Include="WRCluster.hpp" />
     <ClInclude Include="resource.hpp" />

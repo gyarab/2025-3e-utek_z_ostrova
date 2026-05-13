@@ -4,6 +4,9 @@ namespace GameConditions //[start]
 {
 
 //
+static bool temp = false;
+
+//
 void LocationChange(user_events& _AllUserEvents, game_env& _GameState)
 {
 	//Change to level 1
@@ -32,9 +35,10 @@ void LocationChange(user_events& _AllUserEvents, game_env& _GameState)
 	}
 	
 	//Change to main menu
-	if (_AllUserEvents._ESC_KeyPressed)
+	if (_AllUserEvents._ESC_KeyPressed || temp)
 	{
 		_GameState.set_location(MAIN_MENU);
+		temp = false;
 		_GameState._Level_1_Completed = false;
 		_GameState._Level_2_Completed = false;
 	}
@@ -108,7 +112,7 @@ void PlayerMovement(entity& _Player, user_events& _AllUserEvents)
 	return;
 };
 
-//Temp!
+//Temp!!!
 static uint64_t tick_wait;
 
 //
@@ -137,25 +141,97 @@ void PlayerJump(entity& _Player, user_events& _AllUserEvents, game_env& _GameSta
 		return;
 	}
 
-	//Stand still
+	//Stand still - auto gravity
 	//Temp!
-	if (_Player._Hitbox.y < 4 * 127)
-		_Player.set_vector_direction_to_down();
-	else 
-		_Player.nullify_vector_y_direction();
+	_Player.set_vector_direction_to_down();
 
 	return;
 };
 
 //
-void PlayerCollisions(ECluster& _AllEntities, user_events& _AllUserEvents, game_env& _GameState)
+void PlayerCollisions(ECluster& _AllEntities, HCluster& _AllOtherHitboxes)
 {
-	//Temp!!!!!!
-	if (_AllEntities[PLAYER]._Hitbox.x >= 1000.0f && _GameState._CurrentLocation == LEVEL_1)
-		_GameState._Level_1_Completed = true;
+	//
+	entity* Player = (_AllEntities._ClusterOfEntities.data() + PLAYER);
+	int64_t PlayerX_Direction = Player->tell_vector_x_direction();
+	int64_t PlayerY_Direction = Player->tell_vector_y_direction();
 
-	if (_AllEntities[PLAYER]._Hitbox.x >= 1000.0f && _GameState._CurrentLocation == LEVEL_2)
-		_GameState._Level_2_Completed = true;
+	//Temp!
+	for (hitbox OneHitbox : _AllOtherHitboxes._ClusterOfHitboxes)
+		if ((Player->hitbox_is_touching_hitbox_on_left(OneHitbox) && PlayerX_Direction == -1) || (Player->hitbox_is_touching_hitbox_on_right(OneHitbox) && PlayerX_Direction == 1))
+		{
+			Player->_Textures.mark_as_active((Player->_Textures._ActiveSubcluster == &Player->_Textures[MOVING_LEFT] ? STANDING_LEFT : STANDING_RIGHT));
+			Player->nullify_vector_x_direction(); break;
+		}
+
+	for (hitbox OneHitbox : _AllOtherHitboxes._ClusterOfHitboxes)
+		if ((Player->hitbox_is_touching_hitbox_on_up(OneHitbox) && PlayerY_Direction == -1) || (Player->hitbox_is_touching_hitbox_on_down(OneHitbox) && PlayerY_Direction == 1))
+		{
+			Player->nullify_vector_y_direction(); break;
+		}
+
+	for (uint64_t c = CRATE_1; c < _AllEntities._ClusterOfEntities.size(); c++)
+		//Temp! - additional for crate
+		if ((Player->hitbox_is_touching_hitbox_on_left(_AllEntities[c]) && PlayerX_Direction == -1) || (Player->hitbox_is_touching_hitbox_on_right(_AllEntities[c]) && PlayerX_Direction == 1))
+		{
+			Player->_Textures.mark_as_active((Player->_Textures._ActiveSubcluster == &Player->_Textures[MOVING_LEFT] ? STANDING_LEFT : STANDING_RIGHT));
+			Player->nullify_vector_x_direction();
+		}
+
+	for (uint64_t c = CRATE_1; c < _AllEntities._ClusterOfEntities.size(); c++)
+		if ((Player->hitbox_is_touching_hitbox_on_up(_AllEntities[c]) && PlayerY_Direction == -1) || (Player->hitbox_is_touching_hitbox_on_down(_AllEntities[c]) && PlayerY_Direction == 1))
+		{
+			Player->nullify_vector_y_direction();
+		}
+
+	return;
+};
+
+//
+void FloatingStoneMovement(entity& _FloatingStone)
+{
+	if (_FloatingStone._Hitbox.y >= 0.0f)
+		_FloatingStone.set_vector_direction_to_up();
+	else
+	{
+		_FloatingStone._Hitbox.y = 4 * 165.0f;
+		_FloatingStone.nullify_vector_y_direction();
+	}
+
+	return;
+};
+
+//
+void FloatingStonePlayerInteraction(ECluster& _AllEntities)
+{
+	if (_AllEntities[PLAYER].hitbox_is_touching_hitbox_on_down(_AllEntities[FLOATING_STONE]))
+	{
+		if (_AllEntities[PLAYER].tell_vector_y_direction() == 1)
+			_AllEntities[PLAYER].nullify_vector_y_direction();
+
+		_AllEntities[PLAYER]._Vector[DY] += _AllEntities[FLOATING_STONE]._Vector[DY];
+	}
+
+	return;
+};
+
+//
+void SpikeAndRudderPlayerInteration(ECluster& _AllEntities, game_env& _GameState, HCluster& _AllOtherHitboxes)
+{
+	if (_AllEntities[PLAYER].hitbox_is_touching_hitbox_of(_AllEntities[SPIKE]) || _AllEntities[PLAYER].hitbox_is_touching_hitbox_of(_AllOtherHitboxes[BOAT_RUDDER]))
+		temp = true;
+
+	return;
+};
+
+//
+void LevelChange(ECluster& _AllEntities, game_env& _GameState, HCluster& _AllOtherHitboxes)
+{
+	if (_AllEntities[PLAYER].hitbox_is_touching_hitbox_of(_AllOtherHitboxes[EXIT_GATE]))
+		if (_GameState._CurrentLocation == LEVEL_1)
+			_GameState._Level_1_Completed = true;
+		else if (_GameState._CurrentLocation == LEVEL_2)
+			_GameState._Level_2_Completed = true;
 
 	return;
 };

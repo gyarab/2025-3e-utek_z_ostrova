@@ -64,6 +64,27 @@ public:
 	void deal_damage_to(entity& _EntityToBeDamaged);
 	//Function that determines whether on entitys hitbox is inside the onther entitys hitbox or vise versa
 	bool hitbox_is_touching_hitbox_of(entity& _AnotherEntity);
+
+	//Temp!!!
+	bool hitbox_is_touching_hitbox_on_left(entity& _AnotherEntity);
+	//
+	bool hitbox_is_touching_hitbox_on_right(entity& _AnotherEntity);
+	//
+	bool hitbox_is_touching_hitbox_on_up(entity& _AnotherEntity);
+	//
+	bool hitbox_is_touching_hitbox_on_down(entity& _AnotherEntity);
+	
+	//Temp!!!
+	bool hitbox_is_touching_hitbox_of(hitbox& _AnotherHitbox);
+	//
+	bool hitbox_is_touching_hitbox_on_left(hitbox& _AnotherHitbox);
+	//
+	bool hitbox_is_touching_hitbox_on_right(hitbox& _AnotherHitbox);
+	//
+	bool hitbox_is_touching_hitbox_on_up(hitbox& _AnotherHitbox);
+	//
+	bool hitbox_is_touching_hitbox_on_down(hitbox& _AnotherHitbox);
+
 	//
 	void render_itself(SDL_Renderer*& _TextureRenderer, const bool _F1_KeyPressed);
 	//
